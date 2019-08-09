@@ -20,33 +20,41 @@ public class PagoModel extends database {
     Connection conn;
 
     protected ResultSet consultarPago() {
-        ResultSet rs = Read("select * from pago");
+        ResultSet rs = Read("SELECT e.id_empleado, e.id_horario, e.id_cargo, e.nombre, "
+                + "e.apellido_paterno, e.apellido_materno, e.direccion, e.num_seg_social,"
+                + " e.rfc, e.salario, e.curp, e.gratificacion, e.sexo, e.id_departamento,"
+                + " p.numero_cuenta, p.numero_tarjeta, p.descripcion_pago "
+                + "FROM empleado e LEFT JOIN pago p on p.id_empleado = e.id_empleado");
         return rs;
     }
-
-    protected void insertarPago(int numero_cuenta, int numero_tarjeta, String descripcion_pago) {
+ protected ResultSet consultarPagoporempleado(String id_empleado) {
+        ResultSet rs = Read("select * from pago where id_empleado="+id_empleado+"");
+        return rs;
+    }
+    protected void insertarPago(String id_empleado,String numero_cuenta, String numero_tarjeta, String descripcion_pago) {
         PreparedStatement ps = null;
         conn = GetConnection();
         try {
-            ps = conn.prepareStatement("insert into pago(numero_cuenta,numero_tarjeta,descripcion_pago) values(?,?,?)");
-            ps.setInt(1, numero_cuenta);
-            ps.setInt(2, numero_tarjeta);
-            ps.setString(3, descripcion_pago);
+            ps = conn.prepareStatement("insert into pago(id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago) values(?,?,?,?)");
+           ps.setString(1, id_empleado);
+            ps.setString(2, numero_cuenta);
+            ps.setString(3, numero_tarjeta);
+            ps.setString(4, descripcion_pago);
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(PagoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         JOptionPane.showMessageDialog(null, "Registro Insertado");
     }
-     protected void modificarPago(int id, int numero_cuenta, int numero_tarjeta, String descripcion_pago){
+     protected void modificarPago(String id_empleado,String numero_cuenta, String numero_tarjeta, String descripcion_pago){
        PreparedStatement ps = null;
        conn = GetConnection();
         try {
-            ps = conn.prepareStatement("update pago set numero_cuenta=?,numero_tarjeta=?,descripcion_pago=? where id_tipo_pago=?");
-            ps.setInt(1, numero_cuenta);
-            ps.setInt(2, numero_tarjeta);
-            ps.setString(3, descripcion_pago);
-            ps.setInt(4, id);
+            ps = conn.prepareStatement("update pago set id_empleado=? numero_cuenta=?,numero_tarjeta=?,descripcion_pago=?" );
+            ps.setString(1, id_empleado);
+            ps.setString(2, numero_cuenta);
+            ps.setString(3, numero_tarjeta);
+            ps.setString(4, descripcion_pago);
             ps.executeUpdate();
         } catch (SQLException ex) {
             
@@ -54,13 +62,13 @@ public class PagoModel extends database {
         }
         JOptionPane.showMessageDialog(null, "Registro Actualizado");
 }
-     protected void eliminarPago(int id) {
+     protected void eliminarPago(String id) {
         PreparedStatement ps = null;
         conn = GetConnection();
         try {
-            ps = conn.prepareStatement("delete from pago where id_tipo_pago=?");
+            ps = conn.prepareStatement("delete from pago where id_empleado=?");
 
-            ps.setInt(1, id);
+            ps.setString(1, id);
             ps.executeUpdate();
         } catch (SQLException ex) {
 

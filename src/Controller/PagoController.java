@@ -18,18 +18,22 @@ import javax.swing.table.DefaultTableModel;
 public class PagoController extends PagoModel{
     
     public DefaultTableModel tablaHorario(){
-        String [] titulo = {"Id","cuenta","tarjeta","pago"};
+        String [] titulo = {"Codigo","Nombre","Departamento","Numero de cuenta","Descripción"};
         DefaultTableModel tb = new DefaultTableModel(null, titulo);
         
-        Object[] fila = new Object[4];
+        Object[] fila = new Object[5];
         
         ResultSet rs = consultarPago();
          try {
             while (rs.next()) {
-                fila[0] = rs.getInt("id_tipo_pago");
-                fila[1] = rs.getInt("numero_cuenta");
-                fila[2] = rs.getInt("numero_tarjeta");
+                fila[0] = rs.getInt("id_empleado");
+                fila[1] = rs.getString("nombre")+" "+rs.getString("apellidopaterno"+" "+rs.getString("apellidomaterno"));
+                fila[2] = rs.getString("numero_cuenta");
+                fila[3] = rs.getString("numero_tarjeta");
                 fila[4] = rs.getString("descripcion_pago");
+                
+               
+               
                 tb.addRow(fila);
             }
         } catch (SQLException ex) {
@@ -39,14 +43,21 @@ public class PagoController extends PagoModel{
         return tb;
         
     }
-    public void guardar(String accion, int id, int numero_cuenta, int numero_tarjeta, String descripcion_pago){
+    
+    public ResultSet consultar_user_pago(String id_empleado){
+        ResultSet rs=consultarPagoporempleado(id_empleado);
+        return rs;
+        
+    }
+    
+    public void guardar(String id_empleado,String accion, String numero_cuenta, String numero_tarjeta, String descripcion_pago){
         if (accion == "I"){
-            insertarPago(numero_cuenta, numero_tarjeta, descripcion_pago);
+            insertarPago(id_empleado,numero_cuenta, numero_tarjeta, descripcion_pago);
         } else{
-            modificarPago(id, numero_cuenta, numero_tarjeta, descripcion_pago);
+            modificarPago(id_empleado,numero_cuenta, numero_tarjeta, descripcion_pago);
         }
     }
-    public void eliminar(int id){
+    public void eliminar(String id){
         eliminarPago(id);
     }
 }

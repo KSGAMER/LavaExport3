@@ -46,7 +46,6 @@ public class Pn_Pantalla_inicio extends javax.swing.JPanel {
 
             if (p > -1) {
                 Animacion.Animacion.mover_izquierda(0, 1110, 1, 2, label1);
-
             }
             position = position - 1;
             if (position < 0) {
