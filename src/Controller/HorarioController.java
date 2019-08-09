@@ -49,6 +49,7 @@ public class HorarioController extends HorarioModel {
     }
 
     public void eliminar(int id) {
+        
         eliminarHorario(id);
     }
     
@@ -80,7 +81,7 @@ public class HorarioController extends HorarioModel {
         return id_horario;
     }
     
-    public String consultarIdHorarioController(int id_horario){
+    public String consultarIdHorarioController(String id_horario){
         ResultSet rs = consultarHorarioPorIdHorario(id_horario);
         String turno = null;
         try {

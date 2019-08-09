@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CargoController extends CargoModel {
 
-    public DefaultTableModel tablaCargos() {
+   public DefaultTableModel tablaCargos() {
         String[] titulos = {"Id", "Cargo"};
         DefaultTableModel tb = new DefaultTableModel(null, titulos);
         Object[] fila = new Object[2];
@@ -77,7 +77,7 @@ public class CargoController extends CargoModel {
         return id_cargo;
     }
     
-    public String consultarDescripcionCargoController(int id_cargo){
+    public String consultarDescripcionCargoController(String id_cargo){
         ResultSet rs = consultarAreaPorIdCargo(id_cargo);
         String descripcion_cargo = null;
         try {

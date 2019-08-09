@@ -18,6 +18,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class EmpleadoController extends EmpleadoModel {
 
+    DepartamentoController dc=new DepartamentoController();
+    CargoController cc = new CargoController();
+    HorarioController hc = new HorarioController();
+    
     public DefaultTableModel tablaEmpleado() {
 
         String[] titulos = {"Id", "Nombre","Direccion","Sexo","Estatus","CURP","Horario","Cargo","Departamento","Gratificacion","Salario","NSS","RFC"};
@@ -33,9 +37,10 @@ public class EmpleadoController extends EmpleadoModel {
                 fila[3] = rs.getString("sexo");
                 fila[4] = rs.getString("estatus");
                 fila[5] = rs.getString("curp");
-                fila[6] = rs.getString("id_horario");
-                fila[7] = rs.getString("id_cargo");
-                fila[8] = rs.getString("id_departamento");
+                fila[6] = hc.consultarIdHorarioController(rs.getString("id_horario"));
+                fila[7] = cc.consultarDescripcionCargoController(rs.getString("id_cargo"));
+                fila[8] = dc.consultarIdDepartamentoController(rs.getString("id_departamento"));
+
                 fila[9] = rs.getString("gratificacion");
                 fila[10] = rs.getString("salario");
                 fila[11] = rs.getString("num_seg_social");
@@ -51,7 +56,7 @@ public class EmpleadoController extends EmpleadoModel {
     
     
     public void guardar(String accion, int id_empleado, int id_horario, int id_cargo, String nombre, String a_paterno, String a_materno, String curp,
-             int id_departamento, String direccion, double salario, int sexo, int estatus, int num_seg_social, String rfc, double gratificacion) {
+             int id_departamento, String direccion, double salario, int sexo, int estatus, String num_seg_social, String rfc, double gratificacion) {
         if ("I".equals(accion)) {
             insertarEmpleado(id_empleado, id_horario, id_cargo, nombre, a_paterno, a_materno, curp, id_departamento, direccion, salario, sexo, estatus, num_seg_social, rfc, gratificacion);
         } else {

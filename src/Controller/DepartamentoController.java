@@ -83,7 +83,7 @@ public class DepartamentoController extends DepartamentoModel {
         return id_departamento;
     }
     
-    public String consultarIdDepartamentoController(int id_departamento){
+    public String consultarIdDepartamentoController(String id_departamento){
         ResultSet rs = consultarDepartamentoPorIdDepartamento(id_departamento);
         String descripcion = null;
         try {

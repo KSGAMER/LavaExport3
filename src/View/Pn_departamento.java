@@ -11,8 +11,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -25,7 +28,7 @@ public class Pn_departamento extends javax.swing.JPanel {
     int id;
     String area;
     int capacidad;
-
+    DefaultTableModel dm;
     /**
      * Creates new form pnlHome
      */
@@ -41,6 +44,13 @@ public class Pn_departamento extends javax.swing.JPanel {
         cargarTabla();
 
     }
+    
+    private void filtro(String consulta, JTable jtableBuscar) {
+        dm = (DefaultTableModel) jtableBuscar.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
+        jtableBuscar.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(consulta));
+    } 
 
     public void cargarTabla() {
         DefaultTableModel tb = dc.tablaDepartamentos();
@@ -51,22 +61,31 @@ public class Pn_departamento extends javax.swing.JPanel {
 
         t_numtrabajadores.setEnabled(false);
         t_area.setEnabled(false);
+        bt_nuevo.setEnabled(true);
         bt_guardar.setEnabled(false);
         bt_cancelar.setEnabled(false);
-        
         bt_eliminar.setEnabled(false);
+        bt_guardar.setText("Guardar");
     }
 
     public void desbloquearComponentes() {
 
         t_numtrabajadores.setEnabled(true);
         t_area.setEnabled(true);
+        bt_nuevo.setEnabled(false);
         bt_guardar.setEnabled(true);
         bt_cancelar.setEnabled(true);
-        
-        bt_eliminar.setEnabled(true);
-        
+        bt_eliminar.setEnabled(false);
 
+    }
+    public void desbloquear_item(){
+        t_numtrabajadores.setEnabled(true);
+        t_area.setEnabled(true);
+        bt_nuevo.setEnabled(false);
+        bt_guardar.setEnabled(true);
+        bt_cancelar.setEnabled(true);
+        bt_eliminar.setEnabled(true);
+        bt_guardar.setText("Actualizar");
     }
 
     public void ComponenteNoEditable() {
@@ -357,6 +376,7 @@ public class Pn_departamento extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jt_departamentos.getTableHeader().setReorderingAllowed(false);
         jt_departamentos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jt_departamentosMouseClicked(evt);
@@ -451,6 +471,11 @@ public class Pn_departamento extends javax.swing.JPanel {
                 t_empleadoActionPerformed(evt);
             }
         });
+        t_empleado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                t_empleadoKeyTyped(evt);
+            }
+        });
         add(t_empleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 90, 150, -1));
 
         jSeparator5.setBackground(new java.awt.Color(128, 128, 131));
@@ -459,15 +484,16 @@ public class Pn_departamento extends javax.swing.JPanel {
         jLabel23.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(128, 128, 131));
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel23.setText("Buscar Empleado");
-        add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 90, -1, -1));
+        jLabel23.setText("Buscar Departamento");
+        add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 90, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
        
     private void bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cancelarActionPerformed
-        cbIndexInicial();
+       cbIndexInicial();
         limpiarCampos();
         limpiarErrores();
         quitarBordeError();
+        bloquearComponentes();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_bt_cancelarActionPerformed
@@ -520,8 +546,10 @@ public void RowApariencia(){
     }//GEN-LAST:event_bt_nuevoFocusLost
 
     private void bt_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_nuevoActionPerformed
-       desbloquearComponentes();
+       accion = "I";
+        desbloquearComponentes();
         ComponenteEditable();
+        limpiarCampos();
     }//GEN-LAST:event_bt_nuevoActionPerformed
 
     private void t_numtrabajadoresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_numtrabajadoresFocusLost
@@ -599,26 +627,18 @@ public void RowApariencia(){
             lb_errorCampos.setText("TODOS LOS CAMPOS SON OBLIGATORIOS");
 
         } else {
-
-            lb_errorCampos.setText("");
-           
-            bloquearComponentes();
-            limpiarCampos();
-            
-
-            bt_nuevo.setEnabled(true);
             
             
-            
-            //PROGRAMADOR AQUÍ ESCRIBE TU CÓDIGO
-
-            
-            
-            
-            area = t_area.getText();
+           area = t_area.getText();
             capacidad = Integer.parseInt(t_numtrabajadores.getText());
+            //accion = "I";
             dc.guardar(accion, id, area, capacidad);
             cargarTabla();
+            limpiarCampos();
+
+            lb_errorCampos.setText("");
+
+            bloquearComponentes();
             limpiarCampos();
 
             bt_guardar.setText("Guardar");
@@ -627,15 +647,17 @@ public void RowApariencia(){
 
     private void jt_departamentosMouseClicked(java.awt.event.MouseEvent evt) {
         // AQUI VA EL CODIGO PARA SELECCIONAR UN DEPARTAMENTO Y EDITARLO
-        desbloquearComponentes();
+         desbloquear_item();
         ComponenteEditable();
-
         int filaSel = jt_departamentos.getSelectedRow();
         id = Integer.parseInt(jt_departamentos.getValueAt(filaSel, 0).toString());
         area = jt_departamentos.getValueAt(filaSel, 1).toString();
         capacidad = Integer.parseInt(jt_departamentos.getValueAt(filaSel, 2).toString());
         t_area.setText(area);
         t_numtrabajadores.setText(String.valueOf(capacidad));
+        accion = "M";
+         cargarTabla();
+        lb_errorCampos.setText("");
     }
 
 
@@ -679,6 +701,19 @@ public void RowApariencia(){
         t_empleado.setText("");
         // TODO add your handling code here:
     }//GEN-LAST:event_t_empleadoActionPerformed
+
+    private void t_empleadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_empleadoKeyTyped
+char tecla;
+        tecla = evt.getKeyChar();
+        //Convertir a letras mayusculas
+        if (Character.isLetter(tecla)) {
+            evt.setKeyChar(Character.toUpperCase(tecla));
+
+        }
+
+        // TODO add your handling code here:
+        filtro(t_empleado.getText(), jt_departamentos);
+    }//GEN-LAST:event_t_empleadoKeyTyped
     
 
     /**

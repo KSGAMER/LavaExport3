@@ -39,10 +39,11 @@ public class EmpleadoModel extends database {
     }
 
     protected void insertarEmpleado(int id_empleado, int id_horario, int id_cargo, String nombre, String a_paterno, String a_materno, String curp,
-             int id_departamento, String direccion, double salario, int sexo, int estatus, int num_seg_social, String rfc, double gratificacion) {
+             int id_departamento, String direccion, double salario, int sexo, int estatus, String num_seg_social, String rfc, double gratificacion) {
         PreparedStatement ps = null;
         conn = GetConnection();
         try {
+            
             ps = conn.prepareStatement("insert into empleado(id_empleado,id_horario,id_cargo,nombre,apellido_paterno,apellido_materno,"
                     + "curp,id_departamento,direccion,salario,sexo,estatus,num_seg_social,rfc,gratificacion) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setInt(1, id_empleado);
@@ -57,7 +58,7 @@ public class EmpleadoModel extends database {
             ps.setDouble(10, salario);
             ps.setInt(11, sexo);
             ps.setInt(12, estatus);
-            ps.setInt(13, num_seg_social);
+            ps.setString(13, num_seg_social);
             ps.setString(14, rfc);
             ps.setDouble(15, gratificacion);
             ps.executeUpdate();
@@ -68,7 +69,7 @@ public class EmpleadoModel extends database {
     }
 
     protected void modificarEmpleado(int id_empleado, int id_horario, int id_cargo, String nombre, String a_paterno, String a_materno, String curp,
-             int id_departamento, String direccion, double salario, int sexo, int estatus, int num_seg_social, String rfc, double gratificacion) {
+             int id_departamento, String direccion, double salario, int sexo, int estatus, String num_seg_social, String rfc, double gratificacion) {
         PreparedStatement ps = null;
         conn = GetConnection();
         try {
@@ -86,7 +87,7 @@ public class EmpleadoModel extends database {
             ps.setDouble(10, salario);
             ps.setInt(11, sexo);
             ps.setInt(12, estatus);
-            ps.setInt(13, num_seg_social);
+            ps.setString(13, num_seg_social);
             ps.setString(14, rfc);
             ps.setDouble(15, gratificacion);
             ps.executeUpdate();
