@@ -5,11 +5,16 @@
  */
 package View;
 
+import Controller.PagoController;
 import Utilerias.CambiaPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.border.LineBorder;
 
 /**
@@ -18,6 +23,14 @@ import javax.swing.border.LineBorder;
  */
 public class Pn_Pago extends javax.swing.JPanel {
 
+    PagoController pc = new PagoController();
+    String id_empleado;
+    String nombre;
+    String numero_cuenta;
+    String numero_tarjeta;
+    String descripcion_pago;
+    String accion;
+
     /**
      * Creates new form pnlHome
      */
@@ -25,12 +38,10 @@ public class Pn_Pago extends javax.swing.JPanel {
         initComponents();
         RowApariencia();
         RowHeaderApariencia();
-
         bloquearComponentes();
         ComponenteNoEditable();
-
     }
-
+    
     public void bloquearComponentes() {
         t_empleado.setEnabled(false);
         t_cuenta.setEnabled(false);
@@ -44,6 +55,24 @@ public class Pn_Pago extends javax.swing.JPanel {
         bt_eliminar.setEnabled(false);
     }
 
+    public void cargar_datos(String id) {
+        ResultSet rs = pc.consultar_user_pago(id_empleado);
+        try {
+            while (rs.next()) {
+                numero_cuenta = rs.getString("numero_cuenta");
+                numero_tarjeta = rs.getString("numero_tarjeta");
+                descripcion_pago = rs.getString("descripcion_pago");
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Pn_Pago.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        t_tarjeta.setText(numero_tarjeta);
+        t_descripcion.setText(descripcion_pago);
+        t_cuenta.setText(numero_cuenta);
+        
+    }
+    
     public void desbloquearComponentes() {
         t_empleado.setEnabled(true);
         t_cuenta.setEnabled(true);
@@ -53,9 +82,9 @@ public class Pn_Pago extends javax.swing.JPanel {
         bt_cancelar.setEnabled(true);
         t_banco.setEnabled(true);
         bt_eliminar.setEnabled(true);
-    
+        
     }
-
+    
     public void ComponenteNoEditable() {
         t_empleado.setEditable(false);
         t_cuenta.setEditable(false);
@@ -66,7 +95,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         t_banco.setEditable(false);
         
     }
-
+    
     public void ComponenteEditable() {
         t_empleado.setEditable(true);
         t_cuenta.setEditable(true);
@@ -76,7 +105,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         t_numEmpleado.setEditable(true);
         t_banco.setEditable(true);
     }
-
+    
     public void limpiarCampos() {
         t_empleado.setText("Ingrese Número de Empleado");
         t_cuenta.setText("Ingresar Número de Cuenta");
@@ -85,42 +114,43 @@ public class Pn_Pago extends javax.swing.JPanel {
         t_nomEmpleado.setText("Ingrese Nombre de Empleado");
         t_numEmpleado.setText("Ingrese Número de Empleado");
         t_banco.setText("Ingresar Sucursal Bancaria");
-
+        
     }
- public boolean validarEscritura() {
+
+    public boolean validarEscritura() {
         boolean val = true;
         //si el textfield tiene algo diferente a Vacío aparecerá de color negro
-        if (!(t_cuenta.getText().equals("Ingresar Número de Cuenta"))&& !(t_cuenta.getText().equals(""))) {
+        if (!(t_cuenta.getText().equals("Ingresar Número de Cuenta")) && !(t_cuenta.getText().equals(""))) {
             t_cuenta.setBorder(null);
             lb_errorCuenta.setText("");
         } else {
-
+            
             t_cuenta.setBorder(new LineBorder(Color.RED, 1));
             lb_errorCuenta.setText("Ingrese una cuenta válida");
-
+            
             val = false;
         }
-        if (!(t_tarjeta.getText().equals("Ingresar Número de Tarjeta"))&& !(t_tarjeta.getText().equals(""))) {
+        if (!(t_tarjeta.getText().equals("Ingresar Número de Tarjeta")) && !(t_tarjeta.getText().equals(""))) {
             t_tarjeta.setBorder(null);
             lb_errorTarjeta.setText("");
         } else {
-
+            
             t_tarjeta.setBorder(new LineBorder(Color.RED, 1));
             lb_errorTarjeta.setText("Ingrese una tarjeta válida");
-
+            
             val = false;
         }
-         if (!(t_descripcion.getText().equals("Ingresar Descripción"))&& !(t_descripcion.getText().equals(""))) {
+        if (!(t_descripcion.getText().equals("Ingresar Descripción")) && !(t_descripcion.getText().equals(""))) {
             t_descripcion.setBorder(null);
             lb_errorDescripcion.setText("");
         } else {
-
+            
             t_descripcion.setBorder(new LineBorder(Color.RED, 1));
             lb_errorDescripcion.setText("Ingrese una descripción válida");
-
+            
             val = false;
         }
-         /* if (!(t_numEmpleado.getText().equals("Ingrese Número de Empleado"))&& !(t_numEmpleado.getText().equals(""))) {
+        /* if (!(t_numEmpleado.getText().equals("Ingrese Número de Empleado"))&& !(t_numEmpleado.getText().equals(""))) {
             t_numEmpleado.setBorder(null);
             lb_errorNumero.setText("");
         } else {
@@ -139,24 +169,24 @@ public class Pn_Pago extends javax.swing.JPanel {
             lb_errorNombre.setText("Ingrese un número válido");
 
             val = false;*/
-         {
-            if (!(t_banco.getText().equals("Ingresar Sucursal Bancaria"))&& !(t_banco.getText().equals(""))) {
-            t_banco.setBorder(null);
-            lb_errorBanco.setText("");
-        } else {
-
-            t_banco.setBorder(new LineBorder(Color.RED, 1));
-            lb_errorBanco.setText("Ingrese un Nombre de Banco válido");
-
-            val = false;
-        }
+        {
+            if (!(t_banco.getText().equals("Ingresar Sucursal Bancaria")) && !(t_banco.getText().equals(""))) {
+                t_banco.setBorder(null);
+                lb_errorBanco.setText("");
+            } else {
+                
+                t_banco.setBorder(new LineBorder(Color.RED, 1));
+                lb_errorBanco.setText("Ingrese un Nombre de Banco válido");
+                
+                val = false;
+            }
         }
         return val;
-                }
- 
- public Boolean quitarBordeError() {
+    }
+    
+    public Boolean quitarBordeError() {
         Boolean val = true;
-
+        
         if (!(t_cuenta.getText().equals(""))) {
             t_cuenta.setBorder(null);
             lb_errorCuenta.setText("");
@@ -175,9 +205,10 @@ public class Pn_Pago extends javax.swing.JPanel {
         } else {
             val = false;
         }
-         return val;
- }
-  public void limpiarErrores() {
+        return val;
+    }
+
+    public void limpiarErrores() {
         lb_errorCuenta.setText("");
         lb_errorDescripcion.setText("");
         lb_errorTarjeta.setText("");
@@ -186,7 +217,8 @@ public class Pn_Pago extends javax.swing.JPanel {
         lb_errorNombre.setText("");
         lb_errorNumero.setText("");
         
-  }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -385,7 +417,7 @@ public class Pn_Pago extends javax.swing.JPanel {
                 t_descripcionKeyTyped(evt);
             }
         });
-        Jp_usuarios.add(t_descripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 350, 160, -1));
+        Jp_usuarios.add(t_descripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 344, 160, 20));
 
         jLabel19.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(128, 128, 131));
@@ -615,6 +647,11 @@ public class Pn_Pago extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jt_empleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jt_empleadosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jt_empleados);
 
         jSeparator5.setBackground(new java.awt.Color(128, 128, 131));
@@ -684,7 +721,7 @@ public class Pn_Pago extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -736,27 +773,28 @@ public class Pn_Pago extends javax.swing.JPanel {
 
     private void bt_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_agregarActionPerformed
         // TODO add your handling code here:
-        if (!validarEscritura() == true ) {
-
+        if (!validarEscritura() == true) {
+            
             lb_errorCampos.setText("TODOS LOS CAMPOS SON OBLIGATORIOS");
-
+            
         } else {
-
+            id_empleado = t_numEmpleado.getText();
+            numero_cuenta = t_cuenta.getText();
+            numero_tarjeta = t_tarjeta.getText();
+            descripcion_pago = t_descripcion.getText();
+            pc.guardar(id_empleado, accion, numero_cuenta, numero_tarjeta, descripcion_pago);
             lb_errorCampos.setText("");
             limpiarCampos();
             bloquearComponentes();            
             bt_nuevo.setEnabled(true);
 
             //PROGRAMADOR AQUÍ ESCRIBE TU CÓDIGO
-            
-            
-            
             //FIN DEL CÓDIGO DEL PROGRAMADOR
         }
     }//GEN-LAST:event_bt_agregarActionPerformed
 
     private void bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cancelarActionPerformed
-  limpiarCampos();
+        limpiarCampos();
         quitarBordeError();
         limpiarErrores();
 
@@ -772,10 +810,9 @@ public class Pn_Pago extends javax.swing.JPanel {
     }//GEN-LAST:event_t_tarjetaFocusLost
 
     private void t_tarjetaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_tarjetaMouseClicked
-        if(!t_tarjeta.getText().equals("Ingresar Número de Tarjeta")){
-
-        }
-        else{
+        if (!t_tarjeta.getText().equals("Ingresar Número de Tarjeta")) {
+            
+        } else {
             t_tarjeta.setText("");
         }
         // TODO add your handling code here:
@@ -794,7 +831,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         //Convertir a letras mayusculas
         if (Character.isLetter(tecla)) {
             evt.setKeyChar(Character.toUpperCase(tecla));
-
+            
         }
         //
         if (!Character.isDigit(tecla) && tecla != KeyEvent.VK_BACK_SPACE && tecla != KeyEvent.VK_ENTER) {
@@ -806,7 +843,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         } else {
             lb_errorTarjeta.setText("");
             t_tarjeta.setBorder(null);
-
+            
         }
     }//GEN-LAST:event_t_tarjetaKeyTyped
 
@@ -819,10 +856,9 @@ public class Pn_Pago extends javax.swing.JPanel {
     }//GEN-LAST:event_t_descripcionFocusLost
 
     private void t_descripcionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_descripcionMouseClicked
-        if(!t_descripcion.getText().equals("Ingresar Descripción")){
-
-        }
-        else{
+        if (!t_descripcion.getText().equals("Ingresar Descripción")) {
+            
+        } else {
             t_descripcion.setText("");
         }
         // TODO add your handling code here:
@@ -841,7 +877,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         //Convertir a letras mayusculas
         if (Character.isLetter(tecla)) {
             evt.setKeyChar(Character.toUpperCase(tecla));
-
+            
         }
         //
         if (!Character.isLetter(tecla) /*&& !Character.isDigit(tecla)*/ && tecla != KeyEvent.VK_SPACE && tecla != KeyEvent.VK_BACK_SPACE && tecla != KeyEvent.VK_ENTER && tecla != KeyEvent.VK_PERIOD) {
@@ -864,11 +900,10 @@ public class Pn_Pago extends javax.swing.JPanel {
     }//GEN-LAST:event_t_cuentaFocusLost
 
     private void t_cuentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_cuentaMouseClicked
-
-        if(!t_cuenta.getText().equals("Ingresar Número de Cuenta")){
-
-        }
-        else{
+        
+        if (!t_cuenta.getText().equals("Ingresar Número de Cuenta")) {
+            
+        } else {
             t_cuenta.setText("");
         }
         // TODO add your handling code here:
@@ -886,7 +921,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         //Convertir a letras mayusculas
         if (Character.isLetter(tecla)) {
             evt.setKeyChar(Character.toUpperCase(tecla));
-
+            
         }
         //
         if (!Character.isDigit(tecla) && tecla != KeyEvent.VK_BACK_SPACE && tecla != KeyEvent.VK_ENTER) {
@@ -897,7 +932,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         } else {
             lb_errorCuenta.setText("");
             t_cuenta.setBorder(null);
-
+            
         }
     }//GEN-LAST:event_t_cuentaKeyTyped
 
@@ -913,7 +948,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         if (t_empleado.getText().trim().equals("")) {
             t_empleado.setText("Ingrese Número de Empleado");
             t_empleado.setForeground(new Color(153, 153, 153));
-
+            
         }
 
         // TODO add your handling code here:
@@ -931,20 +966,19 @@ public class Pn_Pago extends javax.swing.JPanel {
     }//GEN-LAST:event_t_empleadoActionPerformed
 
     private void t_nomEmpleadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_nomEmpleadoFocusLost
- if (t_nomEmpleado.getText().trim().equals("")) {
+        if (t_nomEmpleado.getText().trim().equals("")) {
             t_nomEmpleado.setText("");
             t_nomEmpleado.setForeground(new Color(153, 153, 153));
-
+            
         }
 // TODO add your handling code here:
     }//GEN-LAST:event_t_nomEmpleadoFocusLost
 
     private void t_nomEmpleadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_nomEmpleadoMouseClicked
         // TODO add your handling code here:
-       if(!t_nomEmpleado.getText().equals("Ingresar Nombre de Empleado")){
+        if (!t_nomEmpleado.getText().equals("Ingresar Nombre de Empleado")) {
             
-        }
-        else{
+        } else {
             t_nomEmpleado.setText("");
         }
     }//GEN-LAST:event_t_nomEmpleadoMouseClicked
@@ -958,7 +992,7 @@ public class Pn_Pago extends javax.swing.JPanel {
     }//GEN-LAST:event_t_nomEmpleadoKeyTyped
 
     private void t_numEmpleadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_numEmpleadoFocusLost
-if (t_numEmpleado.getText().trim().equals("")) {
+        if (t_numEmpleado.getText().trim().equals("")) {
             t_numEmpleado.setText("");
             t_numEmpleado.setForeground(new Color(153, 153, 153));
         }
@@ -966,10 +1000,9 @@ if (t_numEmpleado.getText().trim().equals("")) {
     }//GEN-LAST:event_t_numEmpleadoFocusLost
 
     private void t_numEmpleadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_numEmpleadoMouseClicked
-if(!t_numEmpleado.getText().equals("Ingresar Número de Empleado")){
+        if (!t_numEmpleado.getText().equals("Ingresar Número de Empleado")) {
             
-        }
-        else{
+        } else {
             t_numEmpleado.setText("");
         }        // TODO add your handling code here:
     }//GEN-LAST:event_t_numEmpleadoMouseClicked
@@ -979,12 +1012,12 @@ if(!t_numEmpleado.getText().equals("Ingresar Número de Empleado")){
     }//GEN-LAST:event_t_numEmpleadoActionPerformed
 
     private void t_numEmpleadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_numEmpleadoKeyTyped
- //variable de tipo char
-       
+        //variable de tipo char
+        
     }//GEN-LAST:event_t_numEmpleadoKeyTyped
 
     private void t_bancoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_bancoFocusLost
-     if (t_banco.getText().trim().equals("")) {
+        if (t_banco.getText().trim().equals("")) {
             t_banco.setText("Ingresar Sucursal Bancaria");
             t_banco.setForeground(new Color(153, 153, 153));
         }
@@ -992,10 +1025,9 @@ if(!t_numEmpleado.getText().equals("Ingresar Número de Empleado")){
     }//GEN-LAST:event_t_bancoFocusLost
 
     private void t_bancoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_bancoMouseClicked
- if(!t_banco.getText().equals("Ingresar Sucursal Bancaria")){
-
-        }
-        else{
+        if (!t_banco.getText().equals("Ingresar Sucursal Bancaria")) {
+            
+        } else {
             t_banco.setText("");
         }
         // TODO add your handling code here:
@@ -1006,14 +1038,14 @@ if(!t_numEmpleado.getText().equals("Ingresar Número de Empleado")){
     }//GEN-LAST:event_t_bancoActionPerformed
 
     private void t_bancoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_bancoKeyTyped
-    // TODO add your handling code here:
+        // TODO add your handling code here:
         //variable de tipo char
         char tecla;
         tecla = evt.getKeyChar();
         //Convertir a letras mayusculas
         if (Character.isLetter(tecla)) {
             evt.setKeyChar(Character.toUpperCase(tecla));
-
+            
         }
         //
         if (!Character.isLetter(tecla) /*&& !Character.isDigit(tecla)*/ && tecla != KeyEvent.VK_SPACE && tecla != KeyEvent.VK_BACK_SPACE && tecla != KeyEvent.VK_ENTER && tecla != KeyEvent.VK_PERIOD) {
@@ -1027,6 +1059,15 @@ if(!t_numEmpleado.getText().equals("Ingresar Número de Empleado")){
         }        // TODO add your handling code here:
     }//GEN-LAST:event_t_bancoKeyTyped
 
+    private void jt_empleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_empleadosMouseClicked
+        
+        int filasel = jt_empleados.getSelectedRow();
+        id_empleado=jt_empleados.getValueAt(filasel, 0).toString();
+        nombre = jt_empleados.getValueAt(filasel, 1).toString();
+cargar_datos(id_empleado);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jt_empleadosMouseClicked
     
     public void RowApariencia() {
         jt_empleados.setFocusable(false);
@@ -1040,17 +1081,16 @@ if(!t_numEmpleado.getText().equals("Ingresar Número de Empleado")){
         jt_empleados.setShowVerticalLines(false);
         jt_empleados.setSelectionBackground(new Color(97, 212, 195));
     }
-
+    
     public void RowHeaderApariencia() {
         jt_empleados.getTableHeader().setFont(new Font("Century Gothic", Font.BOLD, 14));
         jt_empleados.getTableHeader().setOpaque(false);
         jt_empleados.getTableHeader().setBackground(new Color(97, 212, 195));
         jt_empleados.getTableHeader().setForeground(new Color(255, 255, 255));
-
+        
     }
-    
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Jp_contenido;
     private javax.swing.JPanel Jp_usuarios;
