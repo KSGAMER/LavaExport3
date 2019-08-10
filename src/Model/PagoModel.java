@@ -36,9 +36,9 @@ public class PagoModel extends database {
         conn = GetConnection();
         try {
             ps = conn.prepareStatement("insert into pago(id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago) values(?,?,?,?)");
-           ps.setInt(1, Integer.parseInt( id_empleado));
-            ps.setInt(2, Integer.parseInt(numero_cuenta));
-            ps.setInt(3, Integer.parseInt(numero_tarjeta));
+           ps.setString(1, id_empleado);
+            ps.setString(2, numero_cuenta);
+            ps.setString(3, numero_tarjeta);
             ps.setString(4, descripcion_pago);
             ps.executeUpdate();
         } catch (SQLException ex) {

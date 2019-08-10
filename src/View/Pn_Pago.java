@@ -777,8 +777,7 @@ private void filtro(String consulta, JTable jtableBuscar){
     }//GEN-LAST:event_bt_nuevoFocusLost
 
     private void bt_nuevoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_nuevoMouseClicked
-        // TODO add your handling code here:
-        bt_nuevo.setEnabled(false);
+
     }//GEN-LAST:event_bt_nuevoMouseClicked
 
     private void bt_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_nuevoActionPerformed
@@ -812,7 +811,7 @@ if(t_tarjeta.getText().equals("")||t_cuenta.getText().equals("")){
             limpiarCampos();
             bloquearComponentes();            
             bt_nuevo.setEnabled(true);
-
+cargar_tabla();
             //PROGRAMADOR AQUÍ ESCRIBE TU CÓDIGO
             //FIN DEL CÓDIGO DEL PROGRAMADOR
         }
