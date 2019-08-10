@@ -36,9 +36,9 @@ public class PagoModel extends database {
         conn = GetConnection();
         try {
             ps = conn.prepareStatement("insert into pago(id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago) values(?,?,?,?)");
-           ps.setString(1, id_empleado);
-            ps.setString(2, numero_cuenta);
-            ps.setString(3, numero_tarjeta);
+           ps.setInt(1, Integer.parseInt( id_empleado));
+            ps.setInt(2, Integer.parseInt(numero_cuenta));
+            ps.setInt(3, Integer.parseInt(numero_tarjeta));
             ps.setString(4, descripcion_pago);
             ps.executeUpdate();
         } catch (SQLException ex) {
@@ -50,11 +50,12 @@ public class PagoModel extends database {
        PreparedStatement ps = null;
        conn = GetConnection();
         try {
-            ps = conn.prepareStatement("update pago set id_empleado=? numero_cuenta=?,numero_tarjeta=?,descripcion_pago=?" );
-            ps.setString(1, id_empleado);
-            ps.setString(2, numero_cuenta);
-            ps.setString(3, numero_tarjeta);
-            ps.setString(4, descripcion_pago);
+            ps = conn.prepareStatement("update pago set  numero_cuenta=?,numero_tarjeta=?,descripcion_pago=? where id_empleado=?" );
+   
+            ps.setInt(1, Integer.parseInt(numero_cuenta));
+            ps.setInt(2, Integer.parseInt(numero_tarjeta));
+            ps.setString(3, descripcion_pago);
+              ps.setInt(4, Integer.parseInt( id_empleado));
             ps.executeUpdate();
         } catch (SQLException ex) {
             

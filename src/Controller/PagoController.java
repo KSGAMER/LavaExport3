@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PagoController extends PagoModel{
     
-    public DefaultTableModel tablaHorario(){
+    public DefaultTableModel tablapago(){
         String [] titulo = {"Codigo","Nombre","Departamento","Numero de cuenta","Descripción"};
         DefaultTableModel tb = new DefaultTableModel(null, titulo);
         
@@ -27,7 +27,7 @@ public class PagoController extends PagoModel{
          try {
             while (rs.next()) {
                 fila[0] = rs.getInt("id_empleado");
-                fila[1] = rs.getString("nombre")+" "+rs.getString("apellidopaterno"+" "+rs.getString("apellidomaterno"));
+                fila[1] = rs.getString("nombre")+" "+rs.getString("apellido_paterno")+" "+rs.getString("apellido_materno");
                 fila[2] = rs.getString("numero_cuenta");
                 fila[3] = rs.getString("numero_tarjeta");
                 fila[4] = rs.getString("descripcion_pago");
@@ -50,7 +50,7 @@ public class PagoController extends PagoModel{
         
     }
     
-    public void guardar(String id_empleado,String accion, String numero_cuenta, String numero_tarjeta, String descripcion_pago){
+    public void guardar(String id_empleado,String  accion, String numero_cuenta, String numero_tarjeta, String descripcion_pago){
         if (accion == "I"){
             insertarPago(id_empleado,numero_cuenta, numero_tarjeta, descripcion_pago);
         } else{

@@ -15,7 +15,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -30,6 +34,7 @@ public class Pn_Pago extends javax.swing.JPanel {
     String numero_tarjeta;
     String descripcion_pago;
     String accion;
+    private DefaultTableModel dm;
 
     /**
      * Creates new form pnlHome
@@ -40,8 +45,13 @@ public class Pn_Pago extends javax.swing.JPanel {
         RowHeaderApariencia();
         bloquearComponentes();
         ComponenteNoEditable();
+        cargar_tabla();
     }
-    
+    public void cargar_tabla(){
+        DefaultTableModel md=pc.tablapago();
+        jt_empleados.setModel(md);
+        
+    }
     public void bloquearComponentes() {
         t_empleado.setEnabled(false);
         t_cuenta.setEnabled(false);
@@ -218,7 +228,12 @@ public class Pn_Pago extends javax.swing.JPanel {
         lb_errorNumero.setText("");
         
     }
-
+private void filtro(String consulta, JTable jtableBuscar){
+        dm = (DefaultTableModel) jtableBuscar.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
+        jtableBuscar.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(consulta));
+   }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -635,6 +650,11 @@ public class Pn_Pago extends javax.swing.JPanel {
                 t_empleadoActionPerformed(evt);
             }
         });
+        t_empleado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                t_empleadoKeyReleased(evt);
+            }
+        });
 
         jt_empleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -764,6 +784,11 @@ public class Pn_Pago extends javax.swing.JPanel {
     private void bt_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_nuevoActionPerformed
         desbloquearComponentes();
         ComponenteEditable();
+if(t_tarjeta.getText().equals("")||t_cuenta.getText().equals("")){
+    accion="I";
+}else{
+    accion="M";
+}        
     }//GEN-LAST:event_bt_nuevoActionPerformed
 
     private void bt_agregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_agregarMouseClicked
@@ -797,7 +822,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         limpiarCampos();
         quitarBordeError();
         limpiarErrores();
-
+bloquearComponentes();
         // TODO add your handling code here:
     }//GEN-LAST:event_bt_cancelarActionPerformed
 
@@ -939,9 +964,11 @@ public class Pn_Pago extends javax.swing.JPanel {
     private void bt_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_eliminarActionPerformed
         // TODO add your handling code here:
 
-        //cargarTabla();
+       id_empleado=t_numEmpleado.getText();
+       pc.eliminar(id_empleado);
+       cargar_tabla();
         limpiarCampos();
-        bt_eliminar.setText("Guardar");
+  bloquearComponentes();
     }//GEN-LAST:event_bt_eliminarActionPerformed
 
     private void t_empleadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_empleadoFocusLost
@@ -1064,10 +1091,18 @@ public class Pn_Pago extends javax.swing.JPanel {
         int filasel = jt_empleados.getSelectedRow();
         id_empleado=jt_empleados.getValueAt(filasel, 0).toString();
         nombre = jt_empleados.getValueAt(filasel, 1).toString();
+        t_numEmpleado.setText(id_empleado);
+        t_nomEmpleado.setText(nombre);
 cargar_datos(id_empleado);
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jt_empleadosMouseClicked
+
+    private void t_empleadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_empleadoKeyReleased
+
+        filtro(t_empleado.getText(), jt_empleados);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_t_empleadoKeyReleased
     
     public void RowApariencia() {
         jt_empleados.setFocusable(false);
