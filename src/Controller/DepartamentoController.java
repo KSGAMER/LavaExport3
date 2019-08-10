@@ -69,12 +69,12 @@ public class DepartamentoController extends DepartamentoModel {
         return cb;
     }
     
-    public Integer consultarAreaDepartamentoController(String descripcion){
+    public String consultarAreaDepartamentoController(String descripcion){
         ResultSet rs = consultarAreaPorIdDepartamento(descripcion);
-        int id_departamento = 0;
+        String id_departamento = null;
         try {
             while (rs.next()) {
-                id_departamento = rs.getInt(1);
+                id_departamento = rs.getString("id_departamento");
                 
             }
         } catch (SQLException ex) {

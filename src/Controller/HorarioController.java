@@ -67,12 +67,12 @@ public class HorarioController extends HorarioModel {
         return cb;
     }
     
-    public Integer consultarTurnoHorarioController(String turno){
+    public String consultarTurnoHorarioController(String turno){
         ResultSet rs = consultarTurnoPorIdHorario(turno);
-        int id_horario = 0;
+        String id_horario = null;
         try {
             while (rs.next()) {
-                id_horario = rs.getInt(1);
+                id_horario = rs.getString("id_horario");
                 
             }
         } catch (SQLException ex) {

@@ -63,12 +63,12 @@ public class CargoController extends CargoModel {
         return cb;
     }
     
-    public Integer consultarIdeCargoController(String descripcion){
+    public String consultarIdeCargoController(String descripcion){
         ResultSet rs = consultarIdPorAreaCargo(descripcion);
-        int id_cargo = 0;
+        String id_cargo = null;
         try {
             while (rs.next()) {
-                id_cargo = rs.getInt(1);
+                id_cargo = rs.getString("id_cargo");
                 
             }
         } catch (SQLException ex) {

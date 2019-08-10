@@ -83,6 +83,7 @@ public class DepartamentoModel extends database {
         } catch (SQLException ex) {
 
             Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede eliminar un registro ligado a otra tabla");
         }
         JOptionPane.showMessageDialog(null, "Registro Eliminado");
     }

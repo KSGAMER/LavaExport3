@@ -55,8 +55,8 @@ public class EmpleadoController extends EmpleadoModel {
     }
     
     
-    public void guardar(String accion, int id_empleado, int id_horario, int id_cargo, String nombre, String a_paterno, String a_materno, String curp,
-             int id_departamento, String direccion, double salario, int sexo, int estatus, String num_seg_social, String rfc, double gratificacion) {
+    public void guardar(String accion, String id_empleado, String id_horario, String id_cargo, String nombre, String a_paterno, String a_materno, String curp,
+             String id_departamento, String direccion, String salario, String sexo, String estatus, String num_seg_social, String rfc, String gratificacion) {
         if ("I".equals(accion)) {
             insertarEmpleado(id_empleado, id_horario, id_cargo, nombre, a_paterno, a_materno, curp, id_departamento, direccion, salario, sexo, estatus, num_seg_social, rfc, gratificacion);
         } else {
@@ -64,11 +64,11 @@ public class EmpleadoController extends EmpleadoModel {
         }
     }
 
-    public void eliminar(int id_empleado) {
+    public void eliminar(String id_empleado) {
         eliminarEmpleado(id_empleado);
     }
     
-    public ResultSet consultarEmpleadoPorCodigo(int id_empleado){
+    public ResultSet consultarEmpleadoPorCodigo(String id_empleado){
         ResultSet rs = consultarEmpleadoPorId(id_empleado);
         return rs;
     }

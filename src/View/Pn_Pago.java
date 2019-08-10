@@ -22,6 +22,9 @@ import javax.swing.border.LineBorder;
  * @author RojeruSan
  */
 public class Pn_Pago extends javax.swing.JPanel {
+    
+    private int limiteTarjeta = 16;
+    private int limiteCuenta = 20;
 
     PagoController pc = new PagoController();
     String id_empleado;
@@ -40,6 +43,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         RowHeaderApariencia();
         bloquearComponentes();
         ComponenteNoEditable();
+        
     }
     
     public void bloquearComponentes() {
@@ -833,6 +837,10 @@ public class Pn_Pago extends javax.swing.JPanel {
             evt.setKeyChar(Character.toUpperCase(tecla));
             
         }
+        
+       if (t_tarjeta.getText().length() == limiteTarjeta) {
+            evt.consume();
+        }
         //
         if (!Character.isDigit(tecla) && tecla != KeyEvent.VK_BACK_SPACE && tecla != KeyEvent.VK_ENTER) {
             getToolkit().beep();
@@ -922,6 +930,9 @@ public class Pn_Pago extends javax.swing.JPanel {
         if (Character.isLetter(tecla)) {
             evt.setKeyChar(Character.toUpperCase(tecla));
             
+        }
+        if (t_cuenta.getText().length() == limiteCuenta) {
+            evt.consume();
         }
         //
         if (!Character.isDigit(tecla) && tecla != KeyEvent.VK_BACK_SPACE && tecla != KeyEvent.VK_ENTER) {
@@ -1064,7 +1075,7 @@ public class Pn_Pago extends javax.swing.JPanel {
         int filasel = jt_empleados.getSelectedRow();
         id_empleado=jt_empleados.getValueAt(filasel, 0).toString();
         nombre = jt_empleados.getValueAt(filasel, 1).toString();
-cargar_datos(id_empleado);
+        cargar_datos(id_empleado);
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jt_empleadosMouseClicked

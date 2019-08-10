@@ -42,24 +42,23 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
     CargoController cc = new CargoController();
 
     HorarioController hc = new HorarioController();
-    //int id_cargo;
-    //String sexo;
+
     String accion;
-    int id_empleado;
-    int id_horario;
-    int id_cargo;
+    String id_empleado;
+    String id_horario;
+    String id_cargo;
     String nombre;
     String a_paterno;
     String a_materno;
     String curp;
-    int id_departamento;
+    String id_departamento;
     String direccion;
-    double salario;
-    int sexo;
-    int estatus;
+    String salario;
+    String sexo;
+    String estatus;
     String num_seg_social;
     String rfc;
-    double gratificacion;
+    String gratificacion;
     
     DefaultTableModel dm;
 
@@ -110,23 +109,23 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
         jt_empleados.setModel(tb);
     }
 
-    public void consultarId(int id_empleado) {
+    public void consultarId(String id_empleado) {
         ResultSet rs = ec.consultarEmpleadoPorCodigo(id_empleado);
         try {
             while (rs.next()) {
-                this.id_empleado = rs.getInt("id_empleado");
-                id_horario = rs.getInt("id_horario");
-                id_cargo = rs.getInt("id_cargo");
+                id_empleado = rs.getString("id_empleado");
+                id_horario = rs.getString("id_horario");
+                id_cargo = rs.getString("id_cargo");
                 nombre = rs.getString("nombre");
                 a_paterno = rs.getString("apellido_paterno");
                 a_materno = rs.getString("apellido_materno");
                 curp = rs.getString("curp");
-                id_departamento = rs.getInt("id_departamento");
+                id_departamento = rs.getString("id_departamento");
                 direccion = rs.getString("direccion");
-                salario = rs.getDouble("salario");
-                gratificacion = rs.getDouble("gratificacion");
-                sexo = rs.getInt("sexo");
-                estatus = rs.getInt("estatus");
+                salario = rs.getString("salario");
+                gratificacion = rs.getString("gratificacion");
+                sexo = rs.getString("sexo");
+                estatus = rs.getString("estatus");
                 num_seg_social = rs.getString("num_seg_social");
                 rfc = rs.getString("rfc");
 
@@ -134,29 +133,29 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(Pn_Nuevo_Empleado.class.getName()).log(Level.SEVERE, null, ex);
         }
-        t_control.setText(String.valueOf(this.id_empleado));
+        t_control.setText(id_empleado);
         t_nombre.setText(nombre);
         t_apaterno.setText(a_paterno);
         t_amaterno.setText(a_materno);
         t_direccion.setText(direccion);
 
-        if (sexo == 1) {
+        if (sexo.equals("1")) {
             //Hacer lo mismo con los else if
             cb_sexo.setSelectedItem("Masculino");
 
-        } else if (sexo == 2) {
+        } else if (sexo.equals("2")) {
             cb_sexo.setSelectedItem("Femenino");
 
-        } else if (sexo == 3) {
+        } else if (sexo.equals("3")) {
             cb_sexo.setSelectedItem("No Especificar");
         }
 
-        if (estatus == 1) {
+        if (estatus.equals("1")) {
             //Hacer lo mismo con los else if
             cb_estatus.setSelectedItem("Activo");
-        } else if (estatus == 2) {
+        } else if (estatus.equals("2")) {
             cb_estatus.setSelectedItem("Inactivo");
-        } else if (estatus == 3) {
+        } else if (estatus.equals("3")) {
             cb_estatus.setSelectedItem("Lista Negra");
         }
         t_curp.setText(curp);
@@ -1344,41 +1343,40 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
 
         } else {
 
-            id_empleado = Integer.parseInt(t_control.getText());
+            id_empleado = t_control.getText();
             nombre = t_nombre.getText();
             a_paterno = t_apaterno.getText();
             a_materno = t_amaterno.getText();
             direccion = t_direccion.getText();
 
             if (cb_sexo.getSelectedItem().toString().equals("Masculino")) {
-                sexo = 1;
+                sexo = "1";
 
             } else if (cb_sexo.getSelectedItem().toString().equals("Femenino")) {
-                sexo = 2;
+                sexo = "2";
 
             } else if (cb_sexo.getSelectedItem().toString().equals("No especificar")) {
-                sexo = 3;
+                sexo = "3";
             }
 
             //sexo = Integer.parseInt(cb_sexo.getSelectedItem().toString()); //Combo box
             if (cb_estatus.getSelectedItem().toString().equals("Activo")) {
-                estatus = 1;
+                estatus = "1";
             } else if (cb_estatus.getSelectedItem().toString().equals("Inactivo")) {
-                estatus = 2;
+                estatus = "2";
             } else if (cb_estatus.getSelectedItem().toString().equals("Lista Negra")) {
-                estatus = 3;
+                estatus = "3";
             }
 
             //estatus = Integer.parseInt(cb_estatus.getSelectedItem().toString());
             curp = t_curp.getText();
-            id_horario = hc.consultarTurnoHorarioController(cb_horario.getSelectedItem().toString());
+           id_horario = hc.consultarTurnoHorarioController(cb_horario.getSelectedItem().toString());
             id_cargo = cc.consultarIdeCargoController(cb_puesto.getSelectedItem().toString());
             id_departamento = dc.consultarAreaDepartamentoController(cb_departamento.getSelectedItem().toString());
-            gratificacion = Double.parseDouble(t_gratificacion.getText());
-            salario = Double.parseDouble(t_salario.getText());
+            gratificacion = t_gratificacion.getText();
+            salario = t_salario.getText();
             num_seg_social = t_nss.getText();
             rfc = t_rfc.getText();
-            //accion = "I";
             ec.guardar(accion, id_empleado, id_horario, id_cargo, nombre, a_paterno, a_materno, curp, id_departamento, direccion, salario, sexo, estatus, num_seg_social, rfc, gratificacion);
             bt_agregar.setText("Guardar");
             cargarTabla();
@@ -1612,10 +1610,9 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
         ComponenteEditable();
         desbloquear_item();
         int filaSel = jt_empleados.getSelectedRow();
-        id_empleado = Integer.parseInt(jt_empleados.getValueAt(filaSel, 0).toString());
+        id_empleado = jt_empleados.getValueAt(filaSel, 0).toString();
         consultarId(id_empleado);
         accion = "M";
-        bt_agregar.setText("Modificar");
         cargarTabla();
         lb_errorCampos.setText("");
         desbloquearComponentes();

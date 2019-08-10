@@ -16,6 +16,7 @@ import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -43,6 +44,7 @@ public class Pn_Horario extends javax.swing.JPanel {
         bloquearComponentes();
         ComponenteNoEditable();
         cargarTabla();
+        tamañoTabla();
 
     }
     
@@ -733,7 +735,6 @@ if(!t_entrada.getText().equals("Ingresar Entrada")){
     private void jt_horariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_horariosMouseClicked
         ComponenteEditable();
         desbloquear_item();
-        
        
         //hc.guardar(accion, id, hora_entrada, hora_salida, turno);
         
@@ -876,7 +877,16 @@ char tecla;
         // TODO add your handling code here:
         filtro(t_empleado.getText(), jt_horarios);
     }//GEN-LAST:event_t_empleadoKeyTyped
+   
+    public void tamañoTabla() {
+        TableColumnModel columnModel = jt_horarios.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(10);
+        columnModel.getColumn(1).setPreferredWidth(180);
+        columnModel.getColumn(2).setPreferredWidth(180);
+        columnModel.getColumn(3).setPreferredWidth(180);
 
+    }
+    
     public void RowApariencia() {
 
     }
