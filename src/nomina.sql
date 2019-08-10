@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-08-2019 a las 15:35:20
+-- Tiempo de generación: 10-08-2019 a las 22:26:05
 -- Versión del servidor: 5.7.24
 -- Versión de PHP: 7.2.19
 
@@ -58,6 +58,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `consultarHorario` ()  begin
 select * from horario;
 end$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `consultarNomGen` ()  begin
+select * from nomina_general;
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `consultarNomInd` ()  begin
+select * from nomina_individual;
+end$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `consultarPago` ()  begin
 select * from pago;
 end$$
@@ -90,6 +98,16 @@ end$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarHorario` (IN `id` INT)  begin
 delete from horario
 where id_horario=id;
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarNomGen` (IN `id` INT)  begin
+delete from nomina_general
+where id_nomina_general=id;
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarNomInd` (IN `id` INT)  begin
+delete from nomina_individual
+where id_nomina_individual=id;
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminarPago` (IN `id` INT)  begin
@@ -132,6 +150,16 @@ end$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarHorario` (IN `hora_llegada` TIME, IN `hora_salida` TIME, IN `turno` VARCHAR(50))  begin
 insert into horario (hora_llegada,hora_salida,turno)
 values (hora_llegada,hora_salida,turno);
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarNomGen` (IN `semana` INT, IN `fecha_inicio` DATE, IN `fecha_fin` DATE, IN `anio` INT, IN `total_extras` DOUBLE(7,2), IN `total_desc` DOUBLE(7,2), `total_nom` INT)  begin
+insert into nomina_general (semana,fecha_inicio,fecha_fin,anio,total_extras,total_desc,total_nom)
+values (semana,fecha_inicio,fecha_fin,anio,total_extras,total_desc,total_nom);
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarNomInd` (IN `id_empleado` INT, IN `id_nomina_general` INT, IN `total_nom_ind` INT, IN `id_descuento` INT, IN `id_extras` INT, IN `id_asistencia` INT)  begin
+insert into nomina_individual (id_empleado,id_nomina_general,total_nom_ind,id_descuento,id_extras,id_asistencia)
+values (id_empleado,id_nomina_general,total_nom_ind,id_descuento,id_extras,id_asistencia);
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarPago` (IN `id_empleado` INT, IN `numero_cuenta` VARCHAR(20), IN `numero_tarjeta` VARCHAR(20), IN `descripcion_pago` VARCHAR(20))  begin
@@ -188,6 +216,17 @@ end$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarHorario` (IN `hora_llegada` TIME, IN `hora_salida` TIME, IN `turno` CHAR(50), IN `id` INT)  begin
 update horario set hora_llegada = hora_llegada , hora_salida = hora_salida , turno = turno
 where id_horario=id;
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarNomGen` (IN `semana` INT, IN `fecha_inicio` DATE, IN `fecha_fin` DATE, IN `anio` INT, IN `total_extras` DOUBLE(7,2), IN `total_desc` DOUBLE(7,2), `total_nom` INT, IN `id` INT)  begin
+update pago set semana = semana, fecha_inicio = fecha_inicio, fecha_fin = fecha_fin , anio = anio , total_extras = total_extras ,total_desc = total_desc , total_nom = total_nom
+where id_nomina_general=id;
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarNomInd` (IN `id_empleado` INT, IN `id_nomina_general` INT, IN `total_nom_ind` INT, IN `id_descuento` INT, IN `id_extras` INT, IN `id_asistencia` INT, IN `id` INT)  begin
+update nomina_individual set id_empleado = id_empleado, id_nomina_general = id_nomina_general , total_nom_ind = total_nom_ind ,  id_descuento = id_descuento ,
+id_extras = id_extras , id_asistencia  = id_asistencia 
+where id_nomina_individual=id;
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarPago` (IN `numero_cuenta` VARCHAR(20), IN `numero_tarjeta` VARCHAR(20), IN `descripcion_pago` VARCHAR(20), IN `id` INT)  begin
@@ -257,7 +296,8 @@ CREATE TABLE `departamento` (
 --
 
 INSERT INTO `departamento` (`id_departamento`, `area`, `num_trab`) VALUES
-(1, 'logistica', 10);
+(1, 'logistica', 10),
+(2, 'confeccion', 25);
 
 -- --------------------------------------------------------
 
@@ -275,7 +315,8 @@ CREATE TABLE `descuento` (
 --
 
 INSERT INTO `descuento` (`id_descuento`, `descripcion_descuento`) VALUES
-(1, 'Retardo');
+(1, 'Retardo'),
+(2, 'Prestamo');
 
 -- --------------------------------------------------------
 
@@ -308,7 +349,8 @@ CREATE TABLE `empleado` (
 --
 
 INSERT INTO `empleado` (`id_empleado`, `id_horario`, `id_cargo`, `nombre`, `apellido_paterno`, `apellido_materno`, `curp`, `id_departamento`, `direccion`, `salario`, `gratificacion`, `sexo`, `estatus`, `num_seg_social`, `rfc`, `fecha_nacimiento`, `fecha_entrada`) VALUES
-(1, 2, 2, 'Gonzalo', 'Ramirez', 'Hernandez', 'RAHA900214HPLMRL09', 1, 'Calle san jose numero 711 colonia ricardo flores magon', 4500.00, 300.45, 1, 1, 154321, 'RAHA900214HPL', '2000-02-15', '2018-01-10');
+(1, 1, 1, 'Alfredo', 'Ramirez', 'Hernandez', 'RAHA900214HPLMRL09', 1, 'Calle san jose numero 711 colonia ricardo flores magon', 4500.00, 300.45, 1, 1, 154321, 'RAHA900214HPL', '2000-02-15', '2018-01-10'),
+(2, 2, 2, 'Gonzalo', 'Martinez', 'Sanchez', 'MASG900214HPLMRL09', 1, 'Calle gabino barreda 809', 2500.00, 100.45, 1, 1, 154321, 'MASG900214HPL', '1998-03-11', '2017-02-13');
 
 -- --------------------------------------------------------
 
@@ -326,7 +368,8 @@ CREATE TABLE `extras` (
 --
 
 INSERT INTO `extras` (`id_extras`, `descripcion_extras`) VALUES
-(1, 'horas extras');
+(1, 'horas extras'),
+(2, 'dias festivos');
 
 -- --------------------------------------------------------
 
@@ -358,13 +401,20 @@ INSERT INTO `horario` (`id_horario`, `hora_llegada`, `hora_salida`, `turno`) VAL
 CREATE TABLE `nomina_general` (
   `id_nomina_general` int(11) NOT NULL,
   `semana` int(11) NOT NULL,
-  `fecha_inicio` int(11) NOT NULL,
-  `fecha_fin` int(11) NOT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_fin` date NOT NULL,
   `anio` int(11) NOT NULL,
   `total_extras` double(7,2) DEFAULT NULL,
   `total_desc` double(7,2) DEFAULT NULL,
   `total_nom` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `nomina_general`
+--
+
+INSERT INTO `nomina_general` (`id_nomina_general`, `semana`, `fecha_inicio`, `fecha_fin`, `anio`, `total_extras`, `total_desc`, `total_nom`) VALUES
+(1, 8, '2019-01-01', '2019-08-05', 2019, 1500.50, 200.00, 8);
 
 -- --------------------------------------------------------
 
@@ -376,9 +426,18 @@ CREATE TABLE `nomina_individual` (
   `id_nomina_individual` int(11) NOT NULL,
   `id_empleado` int(11) NOT NULL,
   `id_nomina_general` int(11) NOT NULL,
-  `id_asistencia` int(11) NOT NULL,
-  `total_nom_ind` int(11) NOT NULL
+  `total_nom_ind` int(11) NOT NULL,
+  `id_descuento` int(11) DEFAULT NULL,
+  `id_extras` int(11) DEFAULT NULL,
+  `id_asistencia` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `nomina_individual`
+--
+
+INSERT INTO `nomina_individual` (`id_nomina_individual`, `id_empleado`, `id_nomina_general`, `total_nom_ind`, `id_descuento`, `id_extras`, `id_asistencia`) VALUES
+(1, 2, 1, 3, 1, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -393,38 +452,12 @@ CREATE TABLE `pago` (
   `descripcion_pago` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `r_asis_emp`
+-- Volcado de datos para la tabla `pago`
 --
 
-CREATE TABLE `r_asis_emp` (
-  `id_asistencia` int(11) NOT NULL,
-  `id_empleado` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `r_desc_nom_i`
---
-
-CREATE TABLE `r_desc_nom_i` (
-  `id_nomina_individual` int(11) NOT NULL,
-  `id_descuento` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `r_extras_nom_i`
---
-
-CREATE TABLE `r_extras_nom_i` (
-  `id_extras` int(11) NOT NULL,
-  `id_nomina_individual` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `pago` (`id_empleado`, `numero_cuenta`, `numero_tarjeta`, `descripcion_pago`) VALUES
+(1, '1234567891234567', '0987654321234567', 'pago');
 
 -- --------------------------------------------------------
 
@@ -500,6 +533,8 @@ ALTER TABLE `nomina_individual`
   ADD PRIMARY KEY (`id_nomina_individual`),
   ADD KEY `id_empleado` (`id_empleado`),
   ADD KEY `id_nomina_general` (`id_nomina_general`),
+  ADD KEY `id_extras` (`id_extras`),
+  ADD KEY `id_descuento` (`id_descuento`),
   ADD KEY `id_asistencia` (`id_asistencia`);
 
 --
@@ -507,27 +542,6 @@ ALTER TABLE `nomina_individual`
 --
 ALTER TABLE `pago`
   ADD KEY `id_empleado` (`id_empleado`);
-
---
--- Indices de la tabla `r_asis_emp`
---
-ALTER TABLE `r_asis_emp`
-  ADD KEY `id_empleado` (`id_empleado`),
-  ADD KEY `id_asistencia` (`id_asistencia`);
-
---
--- Indices de la tabla `r_desc_nom_i`
---
-ALTER TABLE `r_desc_nom_i`
-  ADD KEY `id_descuento` (`id_descuento`),
-  ADD KEY `id_nomina_individual` (`id_nomina_individual`);
-
---
--- Indices de la tabla `r_extras_nom_i`
---
-ALTER TABLE `r_extras_nom_i`
-  ADD KEY `id_extras` (`id_extras`),
-  ADD KEY `id_nomina_individual` (`id_nomina_individual`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -555,19 +569,19 @@ ALTER TABLE `cargo`
 -- AUTO_INCREMENT de la tabla `departamento`
 --
 ALTER TABLE `departamento`
-  MODIFY `id_departamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_departamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `descuento`
 --
 ALTER TABLE `descuento`
-  MODIFY `id_descuento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_descuento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `extras`
 --
 ALTER TABLE `extras`
-  MODIFY `id_extras` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_extras` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `horario`
@@ -579,13 +593,13 @@ ALTER TABLE `horario`
 -- AUTO_INCREMENT de la tabla `nomina_general`
 --
 ALTER TABLE `nomina_general`
-  MODIFY `id_nomina_general` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_nomina_general` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `nomina_individual`
 --
 ALTER TABLE `nomina_individual`
-  MODIFY `id_nomina_individual` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_nomina_individual` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
@@ -611,34 +625,16 @@ ALTER TABLE `empleado`
 ALTER TABLE `nomina_individual`
   ADD CONSTRAINT `nomina_individual_ibfk_1` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`),
   ADD CONSTRAINT `nomina_individual_ibfk_2` FOREIGN KEY (`id_nomina_general`) REFERENCES `nomina_general` (`id_nomina_general`),
-  ADD CONSTRAINT `nomina_individual_ibfk_3` FOREIGN KEY (`id_asistencia`) REFERENCES `asistencia` (`id_asistencia`);
+  ADD CONSTRAINT `nomina_individual_ibfk_3` FOREIGN KEY (`id_descuento`) REFERENCES `descuento` (`id_descuento`),
+  ADD CONSTRAINT `nomina_individual_ibfk_4` FOREIGN KEY (`id_extras`) REFERENCES `extras` (`id_extras`),
+  ADD CONSTRAINT `nomina_individual_ibfk_5` FOREIGN KEY (`id_descuento`) REFERENCES `descuento` (`id_descuento`),
+  ADD CONSTRAINT `nomina_individual_ibfk_6` FOREIGN KEY (`id_asistencia`) REFERENCES `asistencia` (`id_asistencia`);
 
 --
 -- Filtros para la tabla `pago`
 --
 ALTER TABLE `pago`
   ADD CONSTRAINT `pago_ibfk_1` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`);
-
---
--- Filtros para la tabla `r_asis_emp`
---
-ALTER TABLE `r_asis_emp`
-  ADD CONSTRAINT `r_asis_emp_ibfk_1` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`),
-  ADD CONSTRAINT `r_asis_emp_ibfk_2` FOREIGN KEY (`id_asistencia`) REFERENCES `asistencia` (`id_asistencia`);
-
---
--- Filtros para la tabla `r_desc_nom_i`
---
-ALTER TABLE `r_desc_nom_i`
-  ADD CONSTRAINT `r_desc_nom_i_ibfk_1` FOREIGN KEY (`id_descuento`) REFERENCES `descuento` (`id_descuento`),
-  ADD CONSTRAINT `r_desc_nom_i_ibfk_2` FOREIGN KEY (`id_nomina_individual`) REFERENCES `nomina_individual` (`id_nomina_individual`);
-
---
--- Filtros para la tabla `r_extras_nom_i`
---
-ALTER TABLE `r_extras_nom_i`
-  ADD CONSTRAINT `r_extras_nom_i_ibfk_1` FOREIGN KEY (`id_extras`) REFERENCES `extras` (`id_extras`),
-  ADD CONSTRAINT `r_extras_nom_i_ibfk_2` FOREIGN KEY (`id_nomina_individual`) REFERENCES `nomina_individual` (`id_nomina_individual`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
