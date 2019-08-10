@@ -533,6 +533,11 @@ public void limpiarErrores() {
         bt_eliminar.setColorTextNormal(new java.awt.Color(255, 255, 255));
         bt_eliminar.setColorTextPressed(new java.awt.Color(255, 255, 255));
         bt_eliminar.setIconTextGap(25);
+        bt_eliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_eliminarMouseClicked(evt);
+            }
+        });
         bt_eliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_eliminarActionPerformed(evt);
@@ -569,7 +574,7 @@ public void limpiarErrores() {
         jLabel24.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(128, 128, 131));
         jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel24.setText("Buscar Empleado");
+        jLabel24.setText("Buscar Turno");
         add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 410, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
@@ -632,7 +637,7 @@ if (!validarEscritura() == true ) {
 
     }
     private void bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cancelarActionPerformed
-        hc.eliminar(id);
+//        hc.eliminar(id);
 
         limpiarCampos();
         cargarTabla();
@@ -841,6 +846,10 @@ if(!t_entrada.getText().equals("Ingresar Entrada")){
         t_empleado.setText("");
         // TODO add your handling code here:
     }//GEN-LAST:event_t_empleadoActionPerformed
+
+    private void bt_eliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_eliminarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bt_eliminarMouseClicked
 
     public void RowApariencia() {
 

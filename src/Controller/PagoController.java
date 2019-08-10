@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PagoController extends PagoModel{
     
-    public DefaultTableModel tablaHorario(){
+    public DefaultTableModel tablaPago(){
         String [] titulo = {"Id","cuenta","tarjeta","pago"};
         DefaultTableModel tb = new DefaultTableModel(null, titulo);
         
@@ -29,7 +29,7 @@ public class PagoController extends PagoModel{
                 fila[0] = rs.getInt("id_tipo_pago");
                 fila[1] = rs.getInt("numero_cuenta");
                 fila[2] = rs.getInt("numero_tarjeta");
-                fila[4] = rs.getString("descripcion_pago");
+                fila[3] = rs.getString("descripcion_pago");
                 tb.addRow(fila);
             }
         } catch (SQLException ex) {

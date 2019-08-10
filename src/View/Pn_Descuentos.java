@@ -6,13 +6,17 @@
 package View;
 
 import Controller.CargoController;
+import Controller.DescuentoController;
 import Utilerias.CambiaPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -20,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Pn_Descuentos extends javax.swing.JPanel {
 
-    CargoController cc = new CargoController();
+    DescuentoController dc = new DescuentoController();
     String accion;
     int id;
     String descripcion;
@@ -40,8 +44,8 @@ public class Pn_Descuentos extends javax.swing.JPanel {
     }
 
     public void cargarTabla() {
-        DefaultTableModel tb = cc.tablaCargos();
-        jt_Extras.setModel(tb);
+        DefaultTableModel tb = dc.tablaDescuento();
+        jt_Descuentos.setModel(tb);
     }
 
     public void bloquearComponentes() {
@@ -49,9 +53,9 @@ public class Pn_Descuentos extends javax.swing.JPanel {
         t_descuento.setEnabled(false);
         bt_agregar.setEnabled(false);
         bt_cancelar.setEnabled(false);
-        
         bt_eliminar.setEnabled(false);
-
+        bt_nuevo.setEnabled(true);
+        bt_agregar.setText("Agregar");
     }
 
     public void desbloquearComponentes() {
@@ -59,9 +63,17 @@ public class Pn_Descuentos extends javax.swing.JPanel {
         t_descuento.setEnabled(true);
         bt_agregar.setEnabled(true);
         bt_cancelar.setEnabled(true);
-        
         bt_eliminar.setEnabled(true);
+        bt_nuevo.setEnabled(false);
+    }
 
+    public void desbloquear_item() {
+
+        bt_agregar.setEnabled(true);
+        bt_cancelar.setEnabled(true);
+        bt_eliminar.setEnabled(true);
+        bt_nuevo.setEnabled(false);
+        bt_agregar.setText("Actualizar");
     }
 
     public void ComponenteNoEditable() {
@@ -146,7 +158,7 @@ public class Pn_Descuentos extends javax.swing.JPanel {
         lb_errorCampos = new javax.swing.JLabel();
         bt_nuevo = new Utilerias.RSButtonMetro();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jt_Extras = new javax.swing.JTable();
+        jt_Descuentos = new javax.swing.JTable();
         t_empleado = new javax.swing.JTextField();
         jSeparator5 = new javax.swing.JSeparator();
         jLabel23 = new javax.swing.JLabel();
@@ -327,7 +339,7 @@ public class Pn_Descuentos extends javax.swing.JPanel {
         });
         add(bt_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, 140, -1));
 
-        jt_Extras.setModel(new javax.swing.table.DefaultTableModel(
+        jt_Descuentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -338,12 +350,23 @@ public class Pn_Descuentos extends javax.swing.JPanel {
                 "Código", "Descripción", "Valor Aproximado"
             }
         ));
-        jt_Extras.addFocusListener(new java.awt.event.FocusAdapter() {
+        jt_Descuentos.getTableHeader().setReorderingAllowed(false);
+        jt_Descuentos.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                jt_ExtrasFocusGained(evt);
+                jt_DescuentosFocusGained(evt);
             }
         });
-        jScrollPane1.setViewportView(jt_Extras);
+        jt_Descuentos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jt_DescuentosMouseClicked(evt);
+            }
+        });
+        jt_Descuentos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jt_DescuentosKeyTyped(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jt_Descuentos);
 
         add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 200, 470, 180));
 
@@ -365,6 +388,11 @@ public class Pn_Descuentos extends javax.swing.JPanel {
                 t_empleadoActionPerformed(evt);
             }
         });
+        t_empleado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                t_empleadoKeyTyped(evt);
+            }
+        });
         add(t_empleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(831, 130, 150, -1));
 
         jSeparator5.setBackground(new java.awt.Color(128, 128, 131));
@@ -373,17 +401,23 @@ public class Pn_Descuentos extends javax.swing.JPanel {
         jLabel23.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(128, 128, 131));
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel23.setText("Buscar Empleado");
+        jLabel23.setText("Buscar Descuentos");
         add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 130, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_eliminarActionPerformed
-        // cargarTabla();
+        int filasel = jt_Descuentos.getSelectedRow();
+        id = Integer.parseInt(jt_Descuentos.getValueAt(filasel, 0).toString());
+        dc.eliminar(id);
+        cargarTabla();
+        limpiarCampos();
+        bt_eliminar.setText("Eliminar");
+// cargarTabla();
         //limpiarCampos();
     }//GEN-LAST:event_bt_eliminarActionPerformed
 
     private void bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cancelarActionPerformed
-
+        bloquearComponentes();
         limpiarCampos();
         quitarBordeError();
         limpiarErrores();
@@ -419,16 +453,11 @@ public class Pn_Descuentos extends javax.swing.JPanel {
 
         } else {
             descripcion = t_descuento.getText();
-            cc.guardar(accion, id, descripcion);
+            dc.guardar(accion, id, descripcion);
             cargarTabla();
             lb_errorCampos.setText("");
             limpiarCampos();
             bloquearComponentes();
-
-            lb_errorCampos.setText("");
-            limpiarCampos();
-            bloquearComponentes();
-            bt_nuevo.setEnabled(true);
 
             //PROGRAMADOR AQUÍ ESCRIBE TU CÓDIGO
             //FIN DEL CÓDIGO DEL PROGRAMADOR
@@ -481,9 +510,9 @@ public class Pn_Descuentos extends javax.swing.JPanel {
     }//GEN-LAST:event_bt_nuevoMouseClicked
 
     private void bt_agregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_agregarMouseClicked
-        int filasel = jt_Extras.getSelectedRow();
-        id = Integer.parseInt(jt_Extras.getValueAt(filasel, 0).toString());
-        descripcion = jt_Extras.getValueAt(filasel, 1).toString();
+        int filasel = jt_Descuentos.getSelectedRow();
+        id = Integer.parseInt(jt_Descuentos.getValueAt(filasel, 0).toString());
+        descripcion = jt_Descuentos.getValueAt(filasel, 1).toString();
         t_descuento.setText(descripcion);
         accion = "M";
         bt_agregar.setText("Modificar");
@@ -494,9 +523,9 @@ public class Pn_Descuentos extends javax.swing.JPanel {
     }//GEN-LAST:event_bt_agregarMouseClicked
 
     private void bt_eliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_eliminarMouseClicked
-        int filasel = jt_Extras.getSelectedRow();
-        id = Integer.parseInt(jt_Extras.getValueAt(filasel, 0).toString());
-        cc.eliminar(id);
+        int filasel = jt_Descuentos.getSelectedRow();
+        id = Integer.parseInt(jt_Descuentos.getValueAt(filasel, 0).toString());
+        dc.eliminar(id);
 
         // TODO add your handling code here:
         cargarTabla();
@@ -504,9 +533,9 @@ public class Pn_Descuentos extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_bt_eliminarMouseClicked
 
-    private void jt_ExtrasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jt_ExtrasFocusGained
+    private void jt_DescuentosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jt_DescuentosFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_jt_ExtrasFocusGained
+    }//GEN-LAST:event_jt_DescuentosFocusGained
 
     private void t_empleadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_empleadoFocusLost
         if (t_empleado.getText().trim().equals("")) {
@@ -529,24 +558,52 @@ public class Pn_Descuentos extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_t_empleadoActionPerformed
 
+    private void jt_DescuentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_DescuentosMouseClicked
+        ComponenteEditable();
+        desbloquear_item();
+        int filaSel = jt_Descuentos.getSelectedRow();
+        id = Integer.parseInt(jt_Descuentos.getValueAt(filaSel, 0).toString());
+        descripcion = jt_Descuentos.getValueAt(filaSel, 1).toString();
+        t_descuento.setText(descripcion);
+        accion = "M";
+        bt_agregar.setText("Modificar");
+// TODO add your handling code here:
+    }//GEN-LAST:event_jt_DescuentosMouseClicked
+
+    private void jt_DescuentosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jt_DescuentosKeyTyped
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_jt_DescuentosKeyTyped
+
+    private void t_empleadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_empleadoKeyTyped
+        filtro(t_empleado.getText(), jt_Descuentos);
+// TODO add your handling code here:
+    }//GEN-LAST:event_t_empleadoKeyTyped
+    DefaultTableModel dm;
+
+    private void filtro(String consulta, JTable jtableBuscar) {
+        dm = (DefaultTableModel) jtableBuscar.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
+        jtableBuscar.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(consulta));
+    }
+
     public void RowApariencia() {
-        jt_Extras.setFocusable(false);
+        jt_Descuentos.setFocusable(false);
         //espacio entre comulnas
-        jt_Extras.setIntercellSpacing(new Dimension(0, 1));
+        jt_Descuentos.setIntercellSpacing(new Dimension(0, 1));
         //altura de columnas 
-        jt_Extras.setRowHeight(25);
+        jt_Descuentos.setRowHeight(25);
         //margen entre filas
-        jt_Extras.setRowMargin(0);
+        jt_Descuentos.setRowMargin(0);
 //sin lineas verticles
-        jt_Extras.setShowVerticalLines(false);
-        jt_Extras.setSelectionBackground(new Color(97, 212, 195));
-        
-         jt_Extras.getColumnModel().getColumn(0).setPreferredWidth(50);
-         jt_Extras.getColumnModel().getColumn(1).setPreferredWidth(300);
-         
-         
-         
-         /*jt_Extras.getColumnModel().getColumn(2).setPreferredWidth(50);
+        jt_Descuentos.setShowVerticalLines(false);
+        jt_Descuentos.setSelectionBackground(new Color(97, 212, 195));
+
+        jt_Descuentos.getColumnModel().getColumn(0).setPreferredWidth(50);
+        jt_Descuentos.getColumnModel().getColumn(1).setPreferredWidth(300);
+
+        /*jt_Extras.getColumnModel().getColumn(2).setPreferredWidth(50);
          jt_Extras.getColumnModel().getColumn(3).setPreferredWidth(50);
          jt_Extras.getColumn(1).setPreferredWidth(50);
          jt_Extras.getColumn(2).setPreferredWidth(50);
@@ -554,12 +611,10 @@ public class Pn_Descuentos extends javax.swing.JPanel {
     }
 
     public void RowHeaderApariencia() {
-        jt_Extras.getTableHeader().setFont(new Font("Century Gothic", Font.BOLD, 14));
-        jt_Extras.getTableHeader().setOpaque(false);
-        jt_Extras.getTableHeader().setBackground(new Color(97, 212, 195));
-        jt_Extras.getTableHeader().setForeground(new Color(255, 255, 255));
-        
-       
+        jt_Descuentos.getTableHeader().setFont(new Font("Century Gothic", Font.BOLD, 14));
+        jt_Descuentos.getTableHeader().setOpaque(false);
+        jt_Descuentos.getTableHeader().setBackground(new Color(97, 212, 195));
+        jt_Descuentos.getTableHeader().setForeground(new Color(255, 255, 255));
 
     }
 
@@ -577,7 +632,7 @@ public class Pn_Descuentos extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JTable jt_Extras;
+    private javax.swing.JTable jt_Descuentos;
     private javax.swing.JLabel lb_errorCampos;
     private javax.swing.JLabel lb_errorDescuento;
     private javax.swing.JTextField t_descuento;
