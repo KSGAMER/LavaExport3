@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-08-2019 a las 02:24:06
+-- Tiempo de generación: 10-08-2019 a las 15:35:20
 -- Versión del servidor: 5.7.24
 -- Versión de PHP: 7.2.19
 
@@ -117,6 +117,13 @@ insert into descuento (descripcion_descuento)
 values (descripcion_descuento);
 end$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarEmpleado` (IN `id_empleado` INT, IN `id_horario` INT, IN `id_cargo` INT, IN `nombre` VARCHAR(50), IN `apellido_paterno` VARCHAR(50), IN `apellido_materno` VARCHAR(50), IN `curp` VARCHAR(50), IN `id_departamento` INT, IN `direccion` VARCHAR(100), IN `salario` DOUBLE(8,2), IN `sexo` INT, IN `estatus` INT, IN `num_seg_social` INT, IN `rfc` VARCHAR(14), IN `gratificacion` DOUBLE(10,2), IN `fecha_nacimiento` DATE, IN `fecha_entrada` DATE)  begin
+insert into empleado(id_empleado,id_horario,id_cargo,nombre,apellido_paterno,apellido_materno,curp,id_departamento,direccion,salario,sexo,
+estatus,num_seg_social,rfc,gratificacion,fecha_nacimiento,fecha_entrada)
+values(id_empleado,id_horario,id_cargo,nombre,apellido_paterno,apellido_materno,curp,id_departamento,direccion,salario,sexo,
+estatus,num_seg_social,rfc,gratificacion,fecha_nacimiento,fecha_entrada);
+end$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarExtras` (IN `descripcion_extras` VARCHAR(100))  begin
 insert into extras (descripcion_extras)
 values (descripcion_extras);
@@ -127,16 +134,9 @@ insert into horario (hora_llegada,hora_salida,turno)
 values (hora_llegada,hora_salida,turno);
 end$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarPago` (IN `id_empleado` INT(11), IN `numero_cuenta` VARCHAR(20), IN `numero_tarjeta` VARCHAR(20), IN `descripcion_pago` VARCHAR(20))  begin
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarPago` (IN `id_empleado` INT, IN `numero_cuenta` VARCHAR(20), IN `numero_tarjeta` VARCHAR(20), IN `descripcion_pago` VARCHAR(20))  begin
 insert into pago (id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago)
 values (id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago);
-end$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_Empleado` (IN `id_empleado` INT, IN `id_horario` INT, IN `id_cargo` INT, IN `nombre` VARCHAR(50), IN `apellido_paterno` VARCHAR(50), IN `apellido_materno` VARCHAR(50), IN `curp` VARCHAR(50), IN `id_departamento` INT, IN `direccion` VARCHAR(100), IN `salario` DOUBLE(8,2), IN `sexo` INT, IN `estatus` INT, IN `num_seg_social` INT, IN `rfc` VARCHAR(14), IN `gratificacion` DOUBLE(10,2))  begin
-insert into empleado(id_empleado,id_horario,id_cargo,nombre,apellido_paterno,apellido_materno,curp,id_departamento,direccion,salario,sexo,
-estatus,num_seg_social,rfc,gratificacion)
-values(id_empleado,id_horario,id_cargo,nombre,apellido_paterno,apellido_materno,curp,id_departamento,direccion,salario,sexo,
-estatus,num_seg_social,rfc,gratificacion);
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarAsistencia` (IN `dia1` CHAR(1), IN `dia2` CHAR(1), IN `dia3` CHAR(1), IN `dia4` CHAR(1), IN `dia5` CHAR(1), IN `dia6` CHAR(1), IN `dia7` CHAR(1), IN `id` INT)  begin
@@ -159,7 +159,7 @@ update descuento set descripcion_descuento = descripcion_descuento
 where id_descuento=id;
 end$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarEmpleado` (IN `id_horario` INT, IN `id_cargo` INT, IN `nombre` VARCHAR(50), IN `apellido_paterno` VARCHAR(50), IN `apellido_materno` VARCHAR(50), IN `curp` VARCHAR(50), IN `id_departamento` INT, IN `direccion` VARCHAR(100), IN `salario` DOUBLE(8,2), IN `sexo` INT, IN `estatus` INT, IN `num_seg_social` INT, IN `rfc` VARCHAR(14), IN `gratificacion` DOUBLE(10,2), IN `id` INT)  begin
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarEmpleado` (IN `id_horario` INT, IN `id_cargo` INT, IN `nombre` VARCHAR(50), IN `apellido_paterno` VARCHAR(50), IN `apellido_materno` VARCHAR(50), IN `curp` VARCHAR(50), IN `id_departamento` INT, IN `direccion` VARCHAR(100), IN `salario` DOUBLE(8,2), IN `sexo` INT, IN `estatus` INT, IN `num_seg_social` INT, IN `rfc` VARCHAR(14), IN `gratificacion` DOUBLE(10,2), IN `fecha_nacimiento` DATE, IN `fecha_entrada` DATE, IN `id` INT)  begin
 update empleado set 
 id_horario=id_horario,
 id_cargo=id_cargo ,
@@ -174,7 +174,9 @@ sexo=sexo ,
 estatus=estatus ,
 num_seg_social=num_seg_social ,
 rfc=rfc ,
-gratificacion=gratificacion
+gratificacion=gratificacion,
+fecha_nacimiento = fecha_nacimiento ,
+fecha_entrada = fecha_entrada
 where id_empleado=id;
 end$$
 
@@ -217,8 +219,7 @@ CREATE TABLE `asistencia` (
 --
 
 INSERT INTO `asistencia` (`id_asistencia`, `dia1`, `dia2`, `dia3`, `dia4`, `dia5`, `dia6`, `dia7`) VALUES
-(1, '1', '2', '3', '4', '5', '6', '7'),
-(2, '1', '2', '3', '4', '5', '6', '7');
+(1, '1', '2', '3', '4', '5', '6', '7');
 
 -- --------------------------------------------------------
 
@@ -237,7 +238,7 @@ CREATE TABLE `cargo` (
 
 INSERT INTO `cargo` (`id_cargo`, `descripcion_cargo`) VALUES
 (1, 'Gerente'),
-(2, 'Empleado');
+(2, 'Trabajador');
 
 -- --------------------------------------------------------
 
@@ -256,8 +257,7 @@ CREATE TABLE `departamento` (
 --
 
 INSERT INTO `departamento` (`id_departamento`, `area`, `num_trab`) VALUES
-(1, 'logistica', 10),
-(2, 'logistica', 10);
+(1, 'logistica', 10);
 
 -- --------------------------------------------------------
 
@@ -275,8 +275,7 @@ CREATE TABLE `descuento` (
 --
 
 INSERT INTO `descuento` (`id_descuento`, `descripcion_descuento`) VALUES
-(1, 'Retardo'),
-(2, 'Retardo');
+(1, 'Retardo');
 
 -- --------------------------------------------------------
 
@@ -299,16 +298,17 @@ CREATE TABLE `empleado` (
   `sexo` int(11) NOT NULL,
   `estatus` int(11) NOT NULL,
   `num_seg_social` int(11) NOT NULL,
-  `rfc` varchar(13) NOT NULL
+  `rfc` varchar(13) NOT NULL,
+  `fecha_nacimiento` date NOT NULL,
+  `fecha_entrada` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `empleado`
 --
 
-INSERT INTO `empleado` (`id_empleado`, `id_horario`, `id_cargo`, `nombre`, `apellido_paterno`, `apellido_materno`, `curp`, `id_departamento`, `direccion`, `salario`, `gratificacion`, `sexo`, `estatus`, `num_seg_social`, `rfc`) VALUES
-(1, 2, 2, 'Gonzalo', 'Ramirez', 'Hernandez', 'RAHA900214HPLMRL09', 1, 'Calle san jose numero 711 colonia ricardo flores magon', 4500.00, 300.45, 1, 1, 154321, 'RAHA900214HPL'),
-(2, 2, 2, 'Alfredo', 'Soto', 'Perez', 'MASG000215HPLRNNA8', 1, 'Calle Atlixco', 4000.00, 300.45, 1, 1, 154321, 'GAMS900214HPL');
+INSERT INTO `empleado` (`id_empleado`, `id_horario`, `id_cargo`, `nombre`, `apellido_paterno`, `apellido_materno`, `curp`, `id_departamento`, `direccion`, `salario`, `gratificacion`, `sexo`, `estatus`, `num_seg_social`, `rfc`, `fecha_nacimiento`, `fecha_entrada`) VALUES
+(1, 2, 2, 'Gonzalo', 'Ramirez', 'Hernandez', 'RAHA900214HPLMRL09', 1, 'Calle san jose numero 711 colonia ricardo flores magon', 4500.00, 300.45, 1, 1, 154321, 'RAHA900214HPL', '2000-02-15', '2018-01-10');
 
 -- --------------------------------------------------------
 
@@ -326,8 +326,7 @@ CREATE TABLE `extras` (
 --
 
 INSERT INTO `extras` (`id_extras`, `descripcion_extras`) VALUES
-(1, 'horas extras'),
-(2, 'horas extras');
+(1, 'horas extras');
 
 -- --------------------------------------------------------
 
@@ -393,13 +392,6 @@ CREATE TABLE `pago` (
   `numero_tarjeta` varchar(20) NOT NULL,
   `descripcion_pago` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `pago`
---
-
-INSERT INTO `pago` (`id_empleado`, `numero_cuenta`, `numero_tarjeta`, `descripcion_pago`) VALUES
-(1, '1234567891234567', '987654321234567', 'pago');
 
 -- --------------------------------------------------------
 
@@ -551,7 +543,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `asistencia`
 --
 ALTER TABLE `asistencia`
-  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `cargo`
@@ -563,19 +555,19 @@ ALTER TABLE `cargo`
 -- AUTO_INCREMENT de la tabla `departamento`
 --
 ALTER TABLE `departamento`
-  MODIFY `id_departamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_departamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `descuento`
 --
 ALTER TABLE `descuento`
-  MODIFY `id_descuento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_descuento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `extras`
 --
 ALTER TABLE `extras`
-  MODIFY `id_extras` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_extras` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `horario`
