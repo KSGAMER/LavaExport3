@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CargoController extends CargoModel {
 
-    public DefaultTableModel tablaCargos() {
+   public DefaultTableModel tablaCargos() {
         String[] titulos = {"Id", "Cargo"};
         DefaultTableModel tb = new DefaultTableModel(null, titulos);
         Object[] fila = new Object[2];
@@ -63,12 +63,12 @@ public class CargoController extends CargoModel {
         return cb;
     }
     
-    public Integer consultarIdeCargoController(String descripcion){
+    public String consultarIdeCargoController(String descripcion){
         ResultSet rs = consultarIdPorAreaCargo(descripcion);
-        int id_cargo = 0;
+        String id_cargo = null;
         try {
             while (rs.next()) {
-                id_cargo = rs.getInt(1);
+                id_cargo = rs.getString("id_cargo");
                 
             }
         } catch (SQLException ex) {
@@ -77,7 +77,7 @@ public class CargoController extends CargoModel {
         return id_cargo;
     }
     
-    public String consultarDescripcionCargoController(int id_cargo){
+    public String consultarDescripcionCargoController(String id_cargo){
         ResultSet rs = consultarAreaPorIdCargo(id_cargo);
         String descripcion_cargo = null;
         try {

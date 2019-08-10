@@ -21,8 +21,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -39,25 +42,25 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
     CargoController cc = new CargoController();
 
     HorarioController hc = new HorarioController();
-    //int id_cargo;
-    //String sexo;
+
     String accion;
-    int id_empleado;
-    int id_horario;
-    int id_cargo;
+    String id_empleado;
+    String id_horario;
+    String id_cargo;
     String nombre;
     String a_paterno;
     String a_materno;
     String curp;
-    int id_departamento;
+    String id_departamento;
     String direccion;
-    double salario;
-    int sexo;
-    int estatus;
-    int num_seg_social;
+    String salario;
+    String sexo;
+    String estatus;
+    String num_seg_social;
     String rfc;
-    double gratificacion;
-
+    String gratificacion;
+    
+    DefaultTableModel dm;
 
     /**
      * Creates new form pnlHome
@@ -78,13 +81,18 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
         cargarHorarios();
 
     }
-
+    
+    private void filtro(String consulta, JTable jtableBuscar) {
+        dm = (DefaultTableModel) jtableBuscar.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
+        jtableBuscar.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(consulta));
+    } 
 
     public void cargarHorarios() {
         DefaultComboBoxModel md = hc.consultarHorariosTodos();
         cb_horario.setModel(md);
     }
-
 
     public void cargarCargos() {
         DefaultComboBoxModel md = cc.consultarCargosTodos();
@@ -101,62 +109,62 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
         jt_empleados.setModel(tb);
     }
 
-    public void consultarId(int id_empleado) {
+    public void consultarId(String id_empleado) {
         ResultSet rs = ec.consultarEmpleadoPorCodigo(id_empleado);
         try {
             while (rs.next()) {
-                this.id_empleado = rs.getInt("id_empleado");
-                id_horario = rs.getInt("id_horario");
-                id_cargo = rs.getInt("id_cargo");
+                id_empleado = rs.getString("id_empleado");
+                id_horario = rs.getString("id_horario");
+                id_cargo = rs.getString("id_cargo");
                 nombre = rs.getString("nombre");
                 a_paterno = rs.getString("apellido_paterno");
                 a_materno = rs.getString("apellido_materno");
                 curp = rs.getString("curp");
-                id_departamento = rs.getInt("id_departamento");
+                id_departamento = rs.getString("id_departamento");
                 direccion = rs.getString("direccion");
-                salario = rs.getDouble("salario");
-                gratificacion = rs.getDouble("gratificacion");
-                sexo = rs.getInt("sexo");
-                estatus = rs.getInt("estatus");
-                num_seg_social = rs.getInt("num_seg_social");
+                salario = rs.getString("salario");
+                gratificacion = rs.getString("gratificacion");
+                sexo = rs.getString("sexo");
+                estatus = rs.getString("estatus");
+                num_seg_social = rs.getString("num_seg_social");
                 rfc = rs.getString("rfc");
 
             }
         } catch (SQLException ex) {
             Logger.getLogger(Pn_Nuevo_Empleado.class.getName()).log(Level.SEVERE, null, ex);
         }
-        t_control.setText(String.valueOf(this.id_empleado));
+        t_control.setText(id_empleado);
         t_nombre.setText(nombre);
         t_apaterno.setText(a_paterno);
         t_amaterno.setText(a_materno);
         t_direccion.setText(direccion);
 
-        if (sexo == 1) {
+        if (sexo.equals("1")) {
             //Hacer lo mismo con los else if
             cb_sexo.setSelectedItem("Masculino");
 
-        } else if (sexo == 2) {
+        } else if (sexo.equals("2")) {
             cb_sexo.setSelectedItem("Femenino");
 
-        } else if (sexo == 3) {
+        } else if (sexo.equals("3")) {
             cb_sexo.setSelectedItem("No Especificar");
         }
 
-        if (estatus == 1) {
+        if (estatus.equals("1")) {
             //Hacer lo mismo con los else if
             cb_estatus.setSelectedItem("Activo");
-        } else if (estatus == 2) {
+        } else if (estatus.equals("2")) {
             cb_estatus.setSelectedItem("Inactivo");
-        } else if (estatus == 3) {
+        } else if (estatus.equals("3")) {
             cb_estatus.setSelectedItem("Lista Negra");
         }
         t_curp.setText(curp);
-        cb_horario.setSelectedItem(hc.consultarIdHorarioController(id_horario));
-        cb_puesto.setSelectedItem(cc.consultarDescripcionCargoController(id_cargo)); //Hacer lo mismo con los demas cb
-        cb_departamento.setSelectedItem(dc.consultarIdDepartamentoController(id_departamento));
+        cb_horario.setSelectedItem(hc.consultarIdHorarioController(String.valueOf(id_horario)));
+        cb_puesto.setSelectedItem(cc.consultarDescripcionCargoController(String.valueOf(id_cargo))); //Hacer lo mismo con los demas cb
+        cb_departamento.setSelectedItem(dc.consultarIdDepartamentoController(String.valueOf(id_departamento)));
         t_gratificacion.setText(String.valueOf(gratificacion));
         t_salario.setText(String.valueOf(salario));
-        t_nss.setText(String.valueOf(num_seg_social));
+        t_nss.setText(num_seg_social);
         t_rfc.setText(rfc);
 
     }
@@ -881,6 +889,7 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jt_empleados.getTableHeader().setReorderingAllowed(false);
         jt_empleados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jt_empleadosMouseClicked(evt);
@@ -904,6 +913,11 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
         t_empleado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 t_empleadoActionPerformed(evt);
+            }
+        });
+        t_empleado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                t_empleadoKeyTyped(evt);
             }
         });
 
@@ -1014,11 +1028,10 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
 
     private void t_controlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_controlMouseClicked
         // TODO add your handling code here:
-       // t_control.setText("");
-        if(!t_control.getText().equals("Ingresar Número de Control")){
-            
-        }
-        else{
+        // t_control.setText("");
+        if (!t_control.getText().equals("Ingresar Número de Control")) {
+
+        } else {
             t_control.setText("");
         }
     }//GEN-LAST:event_t_controlMouseClicked
@@ -1028,15 +1041,11 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
         if (t_control.getText().trim().equals("")) {
             t_control.setText("Ingresar Numero de Control");
             t_control.setForeground(new Color(153, 153, 153));
-            
-          
+
             // TODO add your handling code here:
         }
-             
-    
-            
-        
-        
+
+
     }//GEN-LAST:event_t_controlFocusLost
 
     private void bt_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_eliminarActionPerformed
@@ -1044,7 +1053,6 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
         ec.eliminar(id_empleado);
         cargarTabla();
         limpiarCampos();
-        bt_eliminar.setText("Eliminar");
     }//GEN-LAST:event_bt_eliminarActionPerformed
 
     private void t_gratificacionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_gratificacionKeyTyped
@@ -1074,10 +1082,9 @@ public class Pn_Nuevo_Empleado extends javax.swing.JPanel {
     }//GEN-LAST:event_t_gratificacionActionPerformed
 
     private void t_gratificacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_gratificacionMouseClicked
-if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
-            
-        }
-        else{
+        if (!t_gratificacion.getText().equals("Ingresar Gratificación")) {
+
+        } else {
             t_gratificacion.setText("");
         }        // TODO add your handling code here:
     }//GEN-LAST:event_t_gratificacionMouseClicked
@@ -1121,10 +1128,9 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
     }//GEN-LAST:event_t_curpActionPerformed
 
     private void t_curpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_curpMouseClicked
-        if(!t_curp.getText().equals("Ingresar CURP")){
-            
-        }
-        else{
+        if (!t_curp.getText().equals("Ingresar CURP")) {
+
+        } else {
             t_curp.setText("");
         }
         // TODO add your handling code here:
@@ -1166,10 +1172,9 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
     }//GEN-LAST:event_t_salarioActionPerformed
 
     private void t_salarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_salarioMouseClicked
-      if(!t_salario.getText().equals("Ingresar Salario")){
-            
-        }
-        else{
+        if (!t_salario.getText().equals("Ingresar Salario")) {
+
+        } else {
             t_salario.setText("");
         }
         // TODO add your handling code here:
@@ -1232,10 +1237,9 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
     }//GEN-LAST:event_t_apaternoActionPerformed
 
     private void t_apaternoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_apaternoMouseClicked
-        if(!t_apaterno.getText().equals("Ingresar Apellido Paterno")){
-            
-        }
-        else{
+        if (!t_apaterno.getText().equals("Ingresar Apellido Paterno")) {
+
+        } else {
             t_apaterno.setText("");
         }
         // TODO add your handling code here:
@@ -1292,10 +1296,9 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
     private void t_nombreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_nombreMouseClicked
         // TODO add your handling code here:
 
-        if(!t_nombre.getText().equals("Ingresar Nombre")){
-            
-        }
-        else{
+        if (!t_nombre.getText().equals("Ingresar Nombre")) {
+
+        } else {
             t_nombre.setText("");
         }
     }//GEN-LAST:event_t_nombreMouseClicked
@@ -1314,10 +1317,11 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
     }//GEN-LAST:event_t_nombreFocusLost
 
     private void bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cancelarActionPerformed
-        cbIndexInicial();
+         cbIndexInicial();
         limpiarCampos();
         limpiarErrores();
         quitarBordeError();
+        bloquearComponentes();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_bt_cancelarActionPerformed
@@ -1339,45 +1343,43 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
 
         } else {
 
-            id_empleado = Integer.parseInt(t_control.getText());
+            id_empleado = t_control.getText();
             nombre = t_nombre.getText();
             a_paterno = t_apaterno.getText();
             a_materno = t_amaterno.getText();
             direccion = t_direccion.getText();
 
             if (cb_sexo.getSelectedItem().toString().equals("Masculino")) {
-                sexo = 1;
+                sexo = "1";
 
             } else if (cb_sexo.getSelectedItem().toString().equals("Femenino")) {
-                sexo = 2;
+                sexo = "2";
 
             } else if (cb_sexo.getSelectedItem().toString().equals("No especificar")) {
-                sexo = 3;
+                sexo = "3";
             }
 
             //sexo = Integer.parseInt(cb_sexo.getSelectedItem().toString()); //Combo box
             if (cb_estatus.getSelectedItem().toString().equals("Activo")) {
-                estatus = 1;
+                estatus = "1";
             } else if (cb_estatus.getSelectedItem().toString().equals("Inactivo")) {
-                estatus = 2;
+                estatus = "2";
             } else if (cb_estatus.getSelectedItem().toString().equals("Lista Negra")) {
-                estatus = 3;
+                estatus = "3";
             }
 
             //estatus = Integer.parseInt(cb_estatus.getSelectedItem().toString());
             curp = t_curp.getText();
-            id_horario = hc.consultarTurnoHorarioController(cb_horario.getSelectedItem().toString());
+           id_horario = hc.consultarTurnoHorarioController(cb_horario.getSelectedItem().toString());
             id_cargo = cc.consultarIdeCargoController(cb_puesto.getSelectedItem().toString());
             id_departamento = dc.consultarAreaDepartamentoController(cb_departamento.getSelectedItem().toString());
-            gratificacion = Double.parseDouble(t_gratificacion.getText());
-            salario = Double.parseDouble(t_salario.getText());
-            num_seg_social = Integer.parseInt(t_nss.getText());
+            gratificacion = t_gratificacion.getText();
+            salario = t_salario.getText();
+            num_seg_social = t_nss.getText();
             rfc = t_rfc.getText();
-            accion = "I";
             ec.guardar(accion, id_empleado, id_horario, id_cargo, nombre, a_paterno, a_materno, curp, id_departamento, direccion, salario, sexo, estatus, num_seg_social, rfc, gratificacion);
             bt_agregar.setText("Guardar");
             cargarTabla();
-
             lb_errorCampos.setText("");
             limpiarCampos();
             bloquearComponentes();
@@ -1396,8 +1398,10 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
     }//GEN-LAST:event_bt_agregarMouseClicked
 
     private void bt_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_nuevoActionPerformed
+        accion = "I";
         desbloquearComponentes();
         ComponenteEditable();
+        limpiarCampos();
     }//GEN-LAST:event_bt_nuevoActionPerformed
 
     private void bt_nuevoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_nuevoMouseClicked
@@ -1440,10 +1444,9 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
     }//GEN-LAST:event_t_direccionActionPerformed
 
     private void t_direccionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_direccionMouseClicked
-        if(!t_direccion.getText().equals("Ingresar Domicilio")){
-            
-        }
-        else{
+        if (!t_direccion.getText().equals("Ingresar Domicilio")) {
+
+        } else {
             t_direccion.setText("");
         }
         // TODO add your handling code here:
@@ -1486,10 +1489,9 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
     }//GEN-LAST:event_t_amaternoActionPerformed
 
     private void t_amaternoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_amaternoMouseClicked
-       if(!t_amaterno.getText().equals("Ingresar Apellido Materno")){
-            
-        }
-        else{
+        if (!t_amaterno.getText().equals("Ingresar Apellido Materno")) {
+
+        } else {
             t_amaterno.setText("");
         }
         // TODO add your handling code here:
@@ -1539,10 +1541,9 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
     }//GEN-LAST:event_t_nssActionPerformed
 
     private void t_nssMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_nssMouseClicked
-        if(!t_nss.getText().equals("Número de Seguridad Social")){
-            
-        }
-        else{
+        if (!t_nss.getText().equals("Número de Seguridad Social")) {
+
+        } else {
             t_nss.setText("");
         }
         // TODO add your handling code here:
@@ -1587,10 +1588,9 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
     }//GEN-LAST:event_t_rfcActionPerformed
 
     private void t_rfcMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_rfcMouseClicked
-       if(!t_rfc.getText().equals("Registro Federal de Contribuyentes")){
-            
-        }
-        else{
+        if (!t_rfc.getText().equals("Registro Federal de Contribuyentes")) {
+
+        } else {
             t_rfc.setText("");
         }
         // TODO add your handling code here:
@@ -1607,12 +1607,15 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
 
     private void jt_empleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_empleadosMouseClicked
         //AQUI VA EL CODIGO PARA SELECCIONAR UN EMPLEADO Y EDITAR O BORRARLO
-        desbloquearComponentes();
         ComponenteEditable();
-
+        desbloquear_item();
         int filaSel = jt_empleados.getSelectedRow();
-        id_empleado = Integer.parseInt(jt_empleados.getValueAt(filaSel, 0).toString());
+        id_empleado = jt_empleados.getValueAt(filaSel, 0).toString();
         consultarId(id_empleado);
+        accion = "M";
+        cargarTabla();
+        lb_errorCampos.setText("");
+        desbloquearComponentes();
     }//GEN-LAST:event_jt_empleadosMouseClicked
 
     private void t_empleadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_empleadoFocusLost
@@ -1635,6 +1638,21 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
         t_empleado.setText("");
         // TODO add your handling code here:
     }//GEN-LAST:event_t_empleadoActionPerformed
+
+    private void t_empleadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_empleadoKeyTyped
+
+char tecla;
+        tecla = evt.getKeyChar();
+        //Convertir a letras mayusculas
+        if (Character.isLetter(tecla)) {
+            evt.setKeyChar(Character.toUpperCase(tecla));
+
+        }
+
+
+        // TODO add your handling code here:
+        filtro(t_empleado.getText(), jt_empleados);
+    }//GEN-LAST:event_t_empleadoKeyTyped
 
     public void aparenciaTabs() {
         ImageIcon iconPestaña = new ImageIcon(this.getClass().getResource("../Imagenes/addusers.png"));
@@ -1664,15 +1682,38 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
         t_rfc.setEnabled(false);
         t_curp.setEnabled(false);
         t_control.setEnabled(false);
+        bt_nuevo.setEnabled(true);
         bt_agregar.setEnabled(false);
         bt_cancelar.setEnabled(false);
-        
         bt_eliminar.setEnabled(false);
+        bt_agregar.setText("Guardar");
 
     }
-    public void bloquearComponenteClick(){
+    
+    
+
+     public void desbloquear_item(){
+         t_nombre.setEnabled(true);
+        t_apaterno.setEnabled(true);
+        t_amaterno.setEnabled(true);
+        t_direccion.setEnabled(true);
+        cb_sexo.setEnabled(true);
+        cb_puesto.setEnabled(true);
+        cb_departamento.setEnabled(true);
+        cb_horario.setEnabled(true);
+        t_gratificacion.setEnabled(true);
+        t_salario.setEnabled(true);
+        cb_estatus.setEnabled(true);
+        cb_sexo.setEnabled(true);
+        t_nss.setEnabled(true);
+        t_rfc.setEnabled(true);
+        t_curp.setEnabled(true);
+        t_control.setEnabled(true);
         bt_nuevo.setEnabled(false);
-        bt_agregar.setEnabled(false);
+        bt_agregar.setEnabled(true);
+        bt_cancelar.setEnabled(true);
+        bt_eliminar.setEnabled(true);
+        bt_agregar.setText("Actualizar");
     }
 
     public void desbloquearComponentes() {
@@ -1692,10 +1733,10 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
         t_rfc.setEnabled(true);
         t_curp.setEnabled(true);
         t_control.setEnabled(true);
+        bt_nuevo.setEnabled(false);
         bt_agregar.setEnabled(true);
         bt_cancelar.setEnabled(true);
-       
-
+        bt_eliminar.setEnabled(true);
     }
 
     public void ComponenteNoEditable() {
@@ -1989,7 +2030,6 @@ if(!t_gratificacion.getText().equals("Ingresar Gratificación")){
         lb_errorDepartamento.setText("");
         lb_errorCampos.setText("");
     }
-
 
     public void RowApariencia() {
         jt_empleados.setFocusable(false);

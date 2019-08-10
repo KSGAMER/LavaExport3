@@ -11,8 +11,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -26,6 +31,7 @@ public class Pn_Horario extends javax.swing.JPanel {
     String hora_entrada;
     String hora_salida;
     String turno;
+    DefaultTableModel dm;
     /**
      * Creates new form pnlHome
      */
@@ -38,9 +44,16 @@ public class Pn_Horario extends javax.swing.JPanel {
         bloquearComponentes();
         ComponenteNoEditable();
         cargarTabla();
+        tamañoTabla();
 
     }
     
+     private void filtro(String consulta, JTable jtableBuscar) {
+        dm = (DefaultTableModel) jtableBuscar.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dm);
+        jtableBuscar.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(consulta));
+    } 
    
     
     public void cargarTabla(){
@@ -48,32 +61,38 @@ public class Pn_Horario extends javax.swing.JPanel {
         jt_horarios.setModel(tb);
     }
 
-    public void bloquearComponentes() {
+   public void bloquearComponentes() {
+
         t_entrada.setEnabled(false);
         t_salida.setEnabled(false);
         t_turno.setEnabled(false);
         bt_nuevo.setEnabled(true);
         bt_agregar.setEnabled(false);
         bt_cancelar.setEnabled(false);
-                bt_eliminar.setEnabled(false);
-
+        bt_eliminar.setEnabled(false);
+        bt_agregar.setText("Guardar");
     }
 
     public void desbloquearComponentes() {
+
         t_entrada.setEnabled(true);
         t_salida.setEnabled(true);
         t_turno.setEnabled(true);
+        bt_nuevo.setEnabled(false);
         bt_agregar.setEnabled(true);
         bt_cancelar.setEnabled(true);
-        
-        bt_eliminar.setEnabled(true);
-        //bt_nuevo.setEnabled(true);
-        
+        bt_eliminar.setEnabled(false);
+
     }
-    
-    public void bloquearComponenteClick(){
+    public void desbloquear_item(){
+        t_entrada.setEnabled(true);
+        t_salida.setEnabled(true);
+        t_turno.setEnabled(true);
         bt_nuevo.setEnabled(false);
-        bt_agregar.setEnabled(false);
+        bt_agregar.setEnabled(true);
+        bt_cancelar.setEnabled(true);
+        bt_eliminar.setEnabled(true);
+        bt_agregar.setText("Actualizar");
     }
 
     public void ComponenteNoEditable() {
@@ -435,6 +454,7 @@ public void limpiarErrores() {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jt_horarios.getTableHeader().setReorderingAllowed(false);
         jt_horarios.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jt_horariosMouseClicked(evt);
@@ -566,6 +586,11 @@ public void limpiarErrores() {
                 t_empleadoActionPerformed(evt);
             }
         });
+        t_empleado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                t_empleadoKeyTyped(evt);
+            }
+        });
         add(t_empleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 410, 150, -1));
 
         jSeparator8.setBackground(new java.awt.Color(128, 128, 131));
@@ -574,7 +599,11 @@ public void limpiarErrores() {
         jLabel24.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(128, 128, 131));
         jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+<<<<<<< HEAD
         jLabel24.setText("Buscar Turno");
+=======
+        jLabel24.setText("Buscar Horario");
+>>>>>>> 833296939785e2691f761c8658b89473e047ab53
         add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 410, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
@@ -587,9 +616,10 @@ public void limpiarErrores() {
     }//GEN-LAST:event_bt_nuevoFocusLost
 
     private void bt_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_nuevoActionPerformed
+        accion="I";
+        
         desbloquearComponentes();
         ComponenteEditable();
-        accion="I";
     }//GEN-LAST:event_bt_nuevoActionPerformed
 
     private void bt_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_agregarActionPerformed
@@ -601,28 +631,16 @@ if (!validarEscritura() == true ) {
 
 
             //PROGRAMADOR AQUÍ ESCRIBE TU CÓDIGO
-            hora_entrada = t_entrada.getText();
+           hora_entrada = t_entrada.getText();
             hora_salida = t_salida.getText();
             turno = t_turno.getText();
-            accion = "I";
+            //accion = "I";
             hc.guardar(accion, id, hora_entrada, hora_salida, turno);
             cargarTabla();
-            bt_agregar.setText("Guardar");
-
             lb_errorCampos.setText("");
             limpiarCampos();
             bloquearComponentes();
-             bt_nuevo.setEnabled(true);
-            //PROGRAMADOR AQUÍ ESCRIBE TU CÓDIGO
-
-// Editar
-        hora_entrada = t_entrada.getText();
-        hora_salida = t_salida.getText();
-        turno = t_turno.getText();
-        hc.guardar(accion, id, hora_entrada, hora_salida, turno);
-        cargarTabla();
-        limpiarCampos();
-        bt_agregar.setText("Guardar");
+            bt_nuevo.setEnabled(true);
         //FIN DEL CÓDIGO DEL PROGRAMADOR
 
             
@@ -637,10 +655,13 @@ if (!validarEscritura() == true ) {
 
     }
     private void bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cancelarActionPerformed
+<<<<<<< HEAD
 //        hc.eliminar(id);
 
+=======
+        bloquearComponentes();
+>>>>>>> 833296939785e2691f761c8658b89473e047ab53
         limpiarCampos();
-        cargarTabla();
         quitarBordeError();
         limpiarErrores();
 
@@ -726,28 +747,38 @@ if(!t_entrada.getText().equals("Ingresar Entrada")){
     }//GEN-LAST:event_t_turnoActionPerformed
 
     private void jt_horariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_horariosMouseClicked
-        desbloquearComponentes();
         ComponenteEditable();
-        bloquearComponenteClick();
+        desbloquear_item();
+       
+        //hc.guardar(accion, id, hora_entrada, hora_salida, turno);
+        
         int filaSel = jt_horarios.getSelectedRow();
-        id = Integer.parseInt( jt_horarios.getValueAt(filaSel,0).toString());
+        id = Integer.parseInt(jt_horarios.getValueAt(filaSel, 0).toString());
         hora_entrada = jt_horarios.getValueAt(filaSel, 1).toString();
         hora_salida = jt_horarios.getValueAt(filaSel, 2).toString();
         turno = jt_horarios.getValueAt(filaSel, 3).toString();
+        
         t_entrada.setText(hora_entrada);
         t_salida.setText(hora_salida);
         t_turno.setText(turno);
-        accion = "M";
-        bt_agregar.setText("Actualizar");
-                
+        
+        
+            accion = "M";
+            bt_agregar.setText("Actualizar");
+        
+        
+        cargarTabla();
+        lb_errorCampos.setText("");
+
     }//GEN-LAST:event_jt_horariosMouseClicked
 
     private void bt_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_eliminarActionPerformed
         // TODO add your handling code here:
+           hc.eliminar(id);
+            cargarTabla();
+            limpiarCampos(); 
 
-        cargarTabla();
-        limpiarCampos();
-        bt_eliminar.setText("Guardar");
+        
     }//GEN-LAST:event_bt_eliminarActionPerformed
 
     private void t_entradaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_entradaKeyTyped
@@ -847,10 +878,36 @@ if(!t_entrada.getText().equals("Ingresar Entrada")){
         // TODO add your handling code here:
     }//GEN-LAST:event_t_empleadoActionPerformed
 
+<<<<<<< HEAD
     private void bt_eliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_eliminarMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_bt_eliminarMouseClicked
 
+=======
+    private void t_empleadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_empleadoKeyTyped
+
+char tecla;
+        tecla = evt.getKeyChar();
+        //Convertir a letras mayusculas
+        if (Character.isLetter(tecla)) {
+            evt.setKeyChar(Character.toUpperCase(tecla));
+
+        }
+
+        // TODO add your handling code here:
+        filtro(t_empleado.getText(), jt_horarios);
+    }//GEN-LAST:event_t_empleadoKeyTyped
+   
+    public void tamañoTabla() {
+        TableColumnModel columnModel = jt_horarios.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(10);
+        columnModel.getColumn(1).setPreferredWidth(180);
+        columnModel.getColumn(2).setPreferredWidth(180);
+        columnModel.getColumn(3).setPreferredWidth(180);
+
+    }
+    
+>>>>>>> 833296939785e2691f761c8658b89473e047ab53
     public void RowApariencia() {
 
     }

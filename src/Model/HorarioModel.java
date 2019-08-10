@@ -73,6 +73,7 @@ public class HorarioModel extends database{
         } catch (SQLException ex) {
             
             Logger.getLogger(HorarioModel.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede eliminar un registro ligado a otra tabla");
         }
         JOptionPane.showMessageDialog(null, "Registro Eliminado");
    }
@@ -82,7 +83,7 @@ public class HorarioModel extends database{
         return rs;
     }
     
-    protected ResultSet consultarHorarioPorIdHorario(int id_horario){
+    protected ResultSet consultarHorarioPorIdHorario(String id_horario){
         ResultSet rs = Read("select * from horario where id_horario="+id_horario);
         return rs;
     }

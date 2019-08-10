@@ -49,6 +49,7 @@ public class HorarioController extends HorarioModel {
     }
 
     public void eliminar(int id) {
+        
         eliminarHorario(id);
     }
     
@@ -66,12 +67,12 @@ public class HorarioController extends HorarioModel {
         return cb;
     }
     
-    public Integer consultarTurnoHorarioController(String turno){
+    public String consultarTurnoHorarioController(String turno){
         ResultSet rs = consultarTurnoPorIdHorario(turno);
-        int id_horario = 0;
+        String id_horario = null;
         try {
             while (rs.next()) {
-                id_horario = rs.getInt(1);
+                id_horario = rs.getString("id_horario");
                 
             }
         } catch (SQLException ex) {
@@ -80,7 +81,7 @@ public class HorarioController extends HorarioModel {
         return id_horario;
     }
     
-    public String consultarIdHorarioController(int id_horario){
+    public String consultarIdHorarioController(String id_horario){
         ResultSet rs = consultarHorarioPorIdHorario(id_horario);
         String turno = null;
         try {

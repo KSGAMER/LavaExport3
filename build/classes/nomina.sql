@@ -3,9 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-07-2019 a las 02:45:27
--- Versión del servidor: 10.3.15-MariaDB
--- Versión de PHP: 7.3.6
+<<<<<<< HEAD
+-- Tiempo de generación: 09-08-2019 a las 17:08:12
+=======
+-- Tiempo de generación: 09-08-2019 a las 20:52:23
+>>>>>>> 48ab51938cc218a5bbea1632ace0e45f268e259e
+-- Versión del servidor: 5.7.24
+-- Versión de PHP: 7.2.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -47,7 +51,7 @@ select * from descuento;
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `consultarEmpleados` ()  begin
-select * from horario;
+select * from empleado;
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `consultarExtras` ()  begin
@@ -127,7 +131,7 @@ insert into horario (hora_llegada,hora_salida,turno)
 values (hora_llegada,hora_salida,turno);
 end$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarPago` (IN `id_empleado` INT, IN `numero_cuenta` INT(16), IN `numero_tarjeta` INT(16), IN `descripcion_pago` VARCHAR(50))  begin
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarPago` (IN `id_empleado` INT(11), IN `numero_cuenta` BIGINT(16), IN `numero_tarjeta` BIGINT(16), IN `descripcion_pago` VARCHAR(50))  begin
 insert into pago (id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago)
 values (id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago);
 end$$
@@ -135,7 +139,8 @@ end$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertar_Empleado` (IN `id_empleado` INT, IN `id_horario` INT, IN `id_cargo` INT, IN `nombre` VARCHAR(50), IN `apellido_paterno` VARCHAR(50), IN `apellido_materno` VARCHAR(50), IN `curp` VARCHAR(50), IN `id_departamento` INT, IN `direccion` VARCHAR(100), IN `salario` DOUBLE(8,2), IN `sexo` INT, IN `estatus` INT, IN `num_seg_social` INT, IN `rfc` VARCHAR(14), IN `gratificacion` DOUBLE(10,2))  begin
 insert into empleado(id_empleado,id_horario,id_cargo,nombre,apellido_paterno,apellido_materno,curp,id_departamento,direccion,salario,sexo,
 estatus,num_seg_social,rfc,gratificacion)
-values(id_empleado,id_horario,id_cargo,nombre,apellido_paterno,apellido_materno,curp,id_departamento,direccion,salario,sexo,estatus,num_seg_social,rfc,gratificacion);
+values(id_empleado,id_horario,id_cargo,nombre,apellido_paterno,apellido_materno,curp,id_departamento,direccion,salario,sexo,
+estatus,num_seg_social,rfc,gratificacion);
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarAsistencia` (IN `dia1` CHAR(1), IN `dia2` CHAR(1), IN `dia3` CHAR(1), IN `dia4` CHAR(1), IN `dia5` CHAR(1), IN `dia6` CHAR(1), IN `dia7` CHAR(1), IN `id` INT)  begin
@@ -184,10 +189,10 @@ end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarHorario` (IN `hora_llegada` TIME, IN `hora_salida` TIME, IN `turno` CHAR(50), IN `id` INT)  begin
 update horario set hora_llegada = hora_llegada , hora_salida = hora_salida , turno = turno
-where id_descuento=id;
+where id_horario=id;
 end$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarPago` (IN `numero_cuenta` INT(16), IN `numero_tarjeta` INT(16), IN `descripcion_pago` VARCHAR(50))  begin
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarPago` (IN `numero_cuenta` BIGINT(16), IN `numero_tarjeta` BIGINT(16), IN `descripcion_pago` VARCHAR(50))  begin
 update pago set hora_llegada = hora_llegada , hora_salida = hora_salida , turno = turno
 where id_descuento=id;
 end$$
@@ -236,7 +241,7 @@ CREATE TABLE `cargo` (
 
 INSERT INTO `cargo` (`id_cargo`, `descripcion_cargo`) VALUES
 (1, 'Gerente'),
-(2, 'Gerente');
+(2, 'Empleado');
 
 -- --------------------------------------------------------
 
@@ -255,7 +260,8 @@ CREATE TABLE `departamento` (
 --
 
 INSERT INTO `departamento` (`id_departamento`, `area`, `num_trab`) VALUES
-(1, 'logistica', 10);
+(1, 'logistica', 10),
+(2, 'logistica', 10);
 
 -- --------------------------------------------------------
 
@@ -273,7 +279,7 @@ CREATE TABLE `descuento` (
 --
 
 INSERT INTO `descuento` (`id_descuento`, `descripcion_descuento`) VALUES
-(1, NULL),
+(1, 'Retardo'),
 (2, 'Retardo');
 
 -- --------------------------------------------------------
@@ -305,7 +311,12 @@ CREATE TABLE `empleado` (
 --
 
 INSERT INTO `empleado` (`id_empleado`, `id_horario`, `id_cargo`, `nombre`, `apellido_paterno`, `apellido_materno`, `curp`, `id_departamento`, `direccion`, `salario`, `gratificacion`, `sexo`, `estatus`, `num_seg_social`, `rfc`) VALUES
-(1, 2, 1, 'Gonzalo', 'Ramirez', 'Hernandez', 'RAHA900214HPLMRL09', 1, 'Calle san jose numero 711 colonia ricardo flores magon', 4500.00, 300.45, 1, 1, 154321, 'RAHA900214HPL');
+<<<<<<< HEAD
+(1, 1, 2, 'Alfredo', 'Ramirez', 'Hernandez', 'RAHA900214HPLMRL09', 1, 'Calle san jose numero 711 colonia ricardo flores magon', 4500.00, 300.45, 1, 1, 154321, 'RAHA900214HPL');
+=======
+(1, 2, 2, 'Gonzalo', 'Ramirez', 'Hernandez', 'RAHA900214HPLMRL09', 1, 'Calle san jose numero 711 colonia ricardo flores magon', 4500.00, 300.45, 1, 1, 154321, 'RAHA900214HPL'),
+(2, 2, 2, 'Alfredo', 'Soto', 'Perez', 'MASG000215HPLRNNA8', 1, 'Calle Atlixco', 4000.00, 300.45, 1, 1, 154321, 'GAMS900214HPL');
+>>>>>>> 48ab51938cc218a5bbea1632ace0e45f268e259e
 
 -- --------------------------------------------------------
 
@@ -323,7 +334,8 @@ CREATE TABLE `extras` (
 --
 
 INSERT INTO `extras` (`id_extras`, `descripcion_extras`) VALUES
-(1, 'horas extras');
+(1, 'horas extras'),
+(2, 'horas extras');
 
 -- --------------------------------------------------------
 
@@ -343,7 +355,8 @@ CREATE TABLE `horario` (
 --
 
 INSERT INTO `horario` (`id_horario`, `hora_llegada`, `hora_salida`, `turno`) VALUES
-(2, '08:00:00', '16:00:00', 'matutino');
+(1, '08:00:00', '16:00:00', 'matutino'),
+(2, '13:00:00', '20:00:00', 'vespertino');
 
 -- --------------------------------------------------------
 
@@ -372,6 +385,7 @@ CREATE TABLE `nomina_individual` (
   `id_nomina_individual` int(11) NOT NULL,
   `id_empleado` int(11) NOT NULL,
   `id_nomina_general` int(11) NOT NULL,
+  `id_asistencia` int(11) NOT NULL,
   `total_nom_ind` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -383,18 +397,21 @@ CREATE TABLE `nomina_individual` (
 
 CREATE TABLE `pago` (
   `id_empleado` int(11) NOT NULL,
-  `numero_cuenta` int(16) NOT NULL,
-  `numero_tarjeta` int(16) NOT NULL,
+  `numero_cuenta` bigint(16) NOT NULL,
+  `numero_tarjeta` bigint(16) NOT NULL,
   `descripcion_pago` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+<<<<<<< HEAD
+=======
 --
 -- Volcado de datos para la tabla `pago`
 --
 
 INSERT INTO `pago` (`id_empleado`, `numero_cuenta`, `numero_tarjeta`, `descripcion_pago`) VALUES
-(1, 2147483647, 2147483647, 'pago');
+(1, 1234567891234567, 987654321234567, 'pago');
 
+>>>>>>> 48ab51938cc218a5bbea1632ace0e45f268e259e
 -- --------------------------------------------------------
 
 --
@@ -439,13 +456,6 @@ CREATE TABLE `usuarios` (
   `username` varchar(20) NOT NULL,
   `password` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `usuarios`
---
-
-INSERT INTO `usuarios` (`id_usuario`, `username`, `password`) VALUES
-(1, 'Administrador', 'ü\0\"âœæö¼y=çÂ3');
 
 --
 -- Índices para tablas volcadas
@@ -508,7 +518,8 @@ ALTER TABLE `nomina_general`
 ALTER TABLE `nomina_individual`
   ADD PRIMARY KEY (`id_nomina_individual`),
   ADD KEY `id_empleado` (`id_empleado`),
-  ADD KEY `id_nomina_general` (`id_nomina_general`);
+  ADD KEY `id_nomina_general` (`id_nomina_general`),
+  ADD KEY `id_asistencia` (`id_asistencia`);
 
 --
 -- Indices de la tabla `pago`
@@ -563,7 +574,7 @@ ALTER TABLE `cargo`
 -- AUTO_INCREMENT de la tabla `departamento`
 --
 ALTER TABLE `departamento`
-  MODIFY `id_departamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_departamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `descuento`
@@ -575,7 +586,7 @@ ALTER TABLE `descuento`
 -- AUTO_INCREMENT de la tabla `extras`
 --
 ALTER TABLE `extras`
-  MODIFY `id_extras` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_extras` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `horario`
@@ -599,7 +610,7 @@ ALTER TABLE `nomina_individual`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -618,7 +629,8 @@ ALTER TABLE `empleado`
 --
 ALTER TABLE `nomina_individual`
   ADD CONSTRAINT `nomina_individual_ibfk_1` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`),
-  ADD CONSTRAINT `nomina_individual_ibfk_2` FOREIGN KEY (`id_nomina_general`) REFERENCES `nomina_general` (`id_nomina_general`);
+  ADD CONSTRAINT `nomina_individual_ibfk_2` FOREIGN KEY (`id_nomina_general`) REFERENCES `nomina_general` (`id_nomina_general`),
+  ADD CONSTRAINT `nomina_individual_ibfk_3` FOREIGN KEY (`id_asistencia`) REFERENCES `asistencia` (`id_asistencia`);
 
 --
 -- Filtros para la tabla `pago`

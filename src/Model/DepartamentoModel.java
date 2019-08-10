@@ -35,7 +35,7 @@ public class DepartamentoModel extends database {
         return rs;
     }
     
-    protected ResultSet consultarDepartamentoPorIdDepartamento(int id_departamento){
+    protected ResultSet consultarDepartamentoPorIdDepartamento(String id_departamento){
         ResultSet rs = Read("select * from departamento where id_departamento="+id_departamento);
         return rs;
     }
@@ -83,6 +83,7 @@ public class DepartamentoModel extends database {
         } catch (SQLException ex) {
 
             Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede eliminar un registro ligado a otra tabla");
         }
         JOptionPane.showMessageDialog(null, "Registro Eliminado");
     }

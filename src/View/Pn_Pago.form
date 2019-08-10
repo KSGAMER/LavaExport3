@@ -295,7 +295,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="220" y="350" width="160" height="-1"/>
+                  <AbsoluteConstraints x="220" y="344" width="160" height="20"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -735,7 +735,11 @@
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+<<<<<<< HEAD
                       <Component id="jScrollPane1" min="-2" pref="229" max="-2" attributes="0"/>
+=======
+                      <Component id="jScrollPane1" min="-2" pref="273" max="-2" attributes="0"/>
+>>>>>>> 833296939785e2691f761c8658b89473e047ab53
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -756,6 +760,7 @@
                 <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="t_empleadoFocusLost"/>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="t_empleadoMouseClicked"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="t_empleadoActionPerformed"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="t_empleadoKeyReleased"/>
               </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -781,7 +786,10 @@
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jt_empleadosMouseClicked"/>
+<<<<<<< HEAD
                     <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jt_empleadosKeyTyped"/>
+=======
+>>>>>>> 833296939785e2691f761c8658b89473e047ab53
                   </Events>
                 </Component>
               </SubComponents>
