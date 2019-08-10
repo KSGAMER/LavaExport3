@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-08-2019 a las 20:52:23
+-- Tiempo de generación: 10-08-2019 a las 02:24:06
 -- Versión del servidor: 5.7.24
 -- Versión de PHP: 7.2.19
 
@@ -127,7 +127,7 @@ insert into horario (hora_llegada,hora_salida,turno)
 values (hora_llegada,hora_salida,turno);
 end$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarPago` (IN `id_empleado` INT(11), IN `numero_cuenta` BIGINT(16), IN `numero_tarjeta` BIGINT(16), IN `descripcion_pago` VARCHAR(50))  begin
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarPago` (IN `id_empleado` INT(11), IN `numero_cuenta` VARCHAR(20), IN `numero_tarjeta` VARCHAR(20), IN `descripcion_pago` VARCHAR(20))  begin
 insert into pago (id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago)
 values (id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago);
 end$$
@@ -188,9 +188,9 @@ update horario set hora_llegada = hora_llegada , hora_salida = hora_salida , tur
 where id_horario=id;
 end$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarPago` (IN `numero_cuenta` BIGINT(16), IN `numero_tarjeta` BIGINT(16), IN `descripcion_pago` VARCHAR(50))  begin
-update pago set hora_llegada = hora_llegada , hora_salida = hora_salida , turno = turno
-where id_descuento=id;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarPago` (IN `numero_cuenta` VARCHAR(20), IN `numero_tarjeta` VARCHAR(20), IN `descripcion_pago` VARCHAR(20), IN `id` INT)  begin
+update pago set numero_cuenta = numero_cuenta , numero_tarjeta = numero_tarjeta , descripcion_pago = descripcion_pago
+where id_empleado=id;
 end$$
 
 DELIMITER ;
@@ -389,9 +389,9 @@ CREATE TABLE `nomina_individual` (
 
 CREATE TABLE `pago` (
   `id_empleado` int(11) NOT NULL,
-  `numero_cuenta` bigint(16) NOT NULL,
-  `numero_tarjeta` bigint(16) NOT NULL,
-  `descripcion_pago` varchar(50) NOT NULL
+  `numero_cuenta` varchar(20) NOT NULL,
+  `numero_tarjeta` varchar(20) NOT NULL,
+  `descripcion_pago` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -399,7 +399,7 @@ CREATE TABLE `pago` (
 --
 
 INSERT INTO `pago` (`id_empleado`, `numero_cuenta`, `numero_tarjeta`, `descripcion_pago`) VALUES
-(1, 1234567891234567, 987654321234567, 'pago');
+(1, '1234567891234567', '987654321234567', 'pago');
 
 -- --------------------------------------------------------
 
