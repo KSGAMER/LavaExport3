@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
+<<<<<<< HEAD
 -- Tiempo de generación: 09-08-2019 a las 17:08:12
+=======
+-- Tiempo de generación: 09-08-2019 a las 20:52:23
+>>>>>>> 48ab51938cc218a5bbea1632ace0e45f268e259e
 -- Versión del servidor: 5.7.24
 -- Versión de PHP: 7.2.19
 
@@ -127,7 +131,7 @@ insert into horario (hora_llegada,hora_salida,turno)
 values (hora_llegada,hora_salida,turno);
 end$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarPago` (IN `id_empleado` INT, IN `numero_cuenta` INT(16), IN `numero_tarjeta` INT(16), IN `descripcion_pago` VARCHAR(50))  begin
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertarPago` (IN `id_empleado` INT(11), IN `numero_cuenta` BIGINT(16), IN `numero_tarjeta` BIGINT(16), IN `descripcion_pago` VARCHAR(50))  begin
 insert into pago (id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago)
 values (id_empleado,numero_cuenta,numero_tarjeta,descripcion_pago);
 end$$
@@ -188,7 +192,7 @@ update horario set hora_llegada = hora_llegada , hora_salida = hora_salida , tur
 where id_horario=id;
 end$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarPago` (IN `numero_cuenta` INT(16), IN `numero_tarjeta` INT(16), IN `descripcion_pago` VARCHAR(50))  begin
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modificarPago` (IN `numero_cuenta` BIGINT(16), IN `numero_tarjeta` BIGINT(16), IN `descripcion_pago` VARCHAR(50))  begin
 update pago set hora_llegada = hora_llegada , hora_salida = hora_salida , turno = turno
 where id_descuento=id;
 end$$
@@ -237,7 +241,7 @@ CREATE TABLE `cargo` (
 
 INSERT INTO `cargo` (`id_cargo`, `descripcion_cargo`) VALUES
 (1, 'Gerente'),
-(2, 'Gerente');
+(2, 'Empleado');
 
 -- --------------------------------------------------------
 
@@ -307,7 +311,12 @@ CREATE TABLE `empleado` (
 --
 
 INSERT INTO `empleado` (`id_empleado`, `id_horario`, `id_cargo`, `nombre`, `apellido_paterno`, `apellido_materno`, `curp`, `id_departamento`, `direccion`, `salario`, `gratificacion`, `sexo`, `estatus`, `num_seg_social`, `rfc`) VALUES
+<<<<<<< HEAD
 (1, 1, 2, 'Alfredo', 'Ramirez', 'Hernandez', 'RAHA900214HPLMRL09', 1, 'Calle san jose numero 711 colonia ricardo flores magon', 4500.00, 300.45, 1, 1, 154321, 'RAHA900214HPL');
+=======
+(1, 2, 2, 'Gonzalo', 'Ramirez', 'Hernandez', 'RAHA900214HPLMRL09', 1, 'Calle san jose numero 711 colonia ricardo flores magon', 4500.00, 300.45, 1, 1, 154321, 'RAHA900214HPL'),
+(2, 2, 2, 'Alfredo', 'Soto', 'Perez', 'MASG000215HPLRNNA8', 1, 'Calle Atlixco', 4000.00, 300.45, 1, 1, 154321, 'GAMS900214HPL');
+>>>>>>> 48ab51938cc218a5bbea1632ace0e45f268e259e
 
 -- --------------------------------------------------------
 
@@ -388,11 +397,21 @@ CREATE TABLE `nomina_individual` (
 
 CREATE TABLE `pago` (
   `id_empleado` int(11) NOT NULL,
-  `numero_cuenta` int(16) NOT NULL,
-  `numero_tarjeta` int(16) NOT NULL,
+  `numero_cuenta` bigint(16) NOT NULL,
+  `numero_tarjeta` bigint(16) NOT NULL,
   `descripcion_pago` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+<<<<<<< HEAD
+=======
+--
+-- Volcado de datos para la tabla `pago`
+--
+
+INSERT INTO `pago` (`id_empleado`, `numero_cuenta`, `numero_tarjeta`, `descripcion_pago`) VALUES
+(1, 1234567891234567, 987654321234567, 'pago');
+
+>>>>>>> 48ab51938cc218a5bbea1632ace0e45f268e259e
 -- --------------------------------------------------------
 
 --
